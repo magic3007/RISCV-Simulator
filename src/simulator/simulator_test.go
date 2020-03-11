@@ -1,7 +1,6 @@
 package simulator
 
 import (
-	"debug/elf"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
@@ -23,11 +22,9 @@ func TestLoadElf(t *testing.T) {
 	log.SetFlags(log.Llongfile | log.LstdFlags)
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			file, err := elf.Open(utils.GetCurrentPath() + test.relativePath)
-			utils.PANIC_CHECK(err)
-			defer file.Close()
-			sim := Simulator{}
-			sim.LoadElfFile(file)
+			filepath := utils.GetCurrentPath() + test.relativePath
+			sim := NewSimulator(filepath)
+			sim.LoadMemory()
 			assert.Equal(t, test.expected, sim.m.LoadU32(sim.pc))
 		})
 	}

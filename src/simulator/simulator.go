@@ -11,10 +11,17 @@ type Simulator struct {
 	m  memory.Memory64
 	rh register.Heap64
 	pc uint64
+	elfFile *elf.File
 }
 
-func (sim *Simulator) LoadElfFile(file *elf.File) {
-	for _, prog := range file.Progs{
+func NewSimulator(elfFilePath string) *Simulator {
+	file, err := elf.Open(elfFilePath)
+	utils.PANIC_CHECK(err)
+	return &Simulator{elfFile: file}
+}
+
+func (sim *Simulator) LoadMemory() {
+	for _, prog := range sim.elfFile.Progs{
 		if prog.Type == elf.PT_LOAD{
 			vaddr, memsz, filesz := prog.Vaddr, prog.Memsz, prog.Filesz
 			buf := make([]byte, filesz)
@@ -24,5 +31,5 @@ func (sim *Simulator) LoadElfFile(file *elf.File) {
 			sim.m.StoreBytes(vaddr, filesz, buf)
 		}
 	}
-	sim.pc = file.Entry
+	sim.pc = sim.elfFile.Entry
 }

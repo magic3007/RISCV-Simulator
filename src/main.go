@@ -30,6 +30,6 @@ func main() {
 	if *verbose == true {
 		statElf(file)
 	}
-	sim := simulator.Simulator{}
-	sim.LoadElfFile(file)
+	sim := simulator.NewSimulator(*filepath)
+	sim.LoadMemory()
 }
