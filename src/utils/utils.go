@@ -4,7 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 	"reflect"
+	"runtime"
 )
 
 func PANIC_CHECK(e error){
@@ -43,7 +45,6 @@ func RecursiveStatField(a interface{}, indent int) {
 			default:
 				fmt.Printf("%-15v: %v\n", t.Field(i).Name, v.Field(i))
 			}
-
 		} else {
 			fmt.Println(t.Field(i).Name)
 			if v.Field(i).CanInterface() {
@@ -51,4 +52,9 @@ func RecursiveStatField(a interface{}, indent int) {
 			}
 		}
 	}
+}
+
+func GetCurrentPath() string{
+	_, filename, _, _ := runtime.Caller(1)
+    return path.Dir(filename)
 }

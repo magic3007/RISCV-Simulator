@@ -104,7 +104,7 @@ func (m *Memory64) StoreU64(addr uint64, value uint64){
 	}
 }
 
-func (m *Memory64) storeBytes(addr uint64, size uint64, bytes []byte){
+func (m *Memory64) StoreBytes(addr uint64, size uint64, bytes []byte){
 	if ms, ok := m.findSegment(addr); ok{
 		copy(ms.slice(addr), bytes[:size])
 	}
