@@ -1,5 +1,5 @@
 
-simple-fuction.out:     file format elf64-littleriscv
+simple-function.out:     file format elf64-littleriscv
 
 
 Disassembly of section .text:
