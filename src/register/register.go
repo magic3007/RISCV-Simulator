@@ -10,29 +10,29 @@ type Heap64 struct{
 	regs [RegNum]uint64
 }
 
-func (rh *Heap64) load(index int) uint64{
+func (rh *Heap64) Load(index uint8) uint64{
 	return rh.regs[index]
 }
 
-func (rh *Heap64) store(index int, value uint64){
+func (rh *Heap64) Store(index uint8, value uint64){
 	if index != 0{
 		rh.regs[index] = value
 	}
 }
 
-func (rh *Heap64) loadByName(name string) uint64{
-	return rh.load(fromString(name))
+func (rh *Heap64) LoadByName(name string) uint64{
+	return rh.Load(fromString(name))
 }
 
-func (rh *Heap64) storeByName(name string, value uint64){
-	rh.store(fromString(name), value)
+func (rh *Heap64) StoreByName(name string, value uint64){
+	rh.Store(fromString(name), value)
 }
 
-func fromString(name string) int{
+func fromString(name string) uint8{
 	for index, lst := range RegName{
 		for _, str := range lst{
 			if str == name{
-				return index
+				return uint8(index)
 			}
 		}
 	}
