@@ -2,60 +2,60 @@
 package {{.PACKAGE}}
 
 import (
-    {{- range $index, $value := .IMPORT}}
-        "{{$value}}"
-    {{- end}}
+	{{- range $index, $value := .IMPORT}}
+		"{{$value}}"
+	{{- end}}
 )
 
 const (
-    {{- range $index, $element := .CONST}}
-        {{$index}} = {{$element}}
-    {{- end}}
+	{{- range $index, $element := .CONST}}
+		{{$index}} = {{$element}}
+	{{- end}}
 )
 
 type Action struct{
-    Name string
+	Name string
 	Pred func (uint32) bool
 	Inst func (uint32) isa.Instruction
 	Exec func (*Simulator, isa.Instruction)
 }
 
 var ActionSet = []Action{
-    {{- range .ActionSet -}}
-        {
-            Name: "{{.Name}}",
-            Pred: func (inst uint32) bool {
-                return isa.IsMatch{{- .Type -}}Format({{.Opcode}},{{if ne .Funct3 ""}}{{.Funct3}},{{end}}{{if ne .Funct7 ""}}{{.Funct7}},{{end}} inst{{if ne .BitConstraint ""}},{{.BitConstraint}}{{end}})
-            },
-            Inst: func (inst uint32) isa.Instruction {
-                return isa.New{{- .Type -}}Instruction(inst)
-            },
-            Exec: func (sim *Simulator, inst isa.Instruction){
-			    m, r, pc := &sim.M, &sim.R, &sim.PC
-			    _, _, _ = m, r, pc // Ensure any variable is used once
-			    if t, ok := inst.(*isa.{{- .Type -}}Instruction); ok{
+	{{- range .ActionSet -}}
+		{
+			Name: "{{.Name}}",
+			Pred: func (inst uint32) bool {
+				return isa.IsMatch{{- .Type -}}Format({{.Opcode}},{{if ne .Funct3 ""}}{{.Funct3}},{{end}}{{if ne .Funct7 ""}}{{.Funct7}},{{end}} inst{{if ne .BitConstraint ""}},{{.BitConstraint}}{{end}})
+			},
+			Inst: func (inst uint32) isa.Instruction {
+				return isa.New{{- .Type -}}Instruction(inst)
+			},
+			Exec: func (sim *Simulator, inst isa.Instruction){
+				m, r, pc := &sim.M, &sim.R, &sim.PC
+				_, _, _ = m, r, pc // Ensure any variable is used once
+				if t, ok := inst.(*isa.{{- .Type -}}Instruction); ok{
 {{- block "ExtractVariable" .Type }}
-    {{- if eq . "R" }}
-                    rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
-                    _, _, _ = rs1, rs2, rd // Ensure any variable is used once
-    {{- else if eq . "I" }}
-                    rs1, rd, imm := t.Rs1, t.Rd, t.Imm
-                    _, _, _ = rs1, rd, imm
-    {{- else if (or (eq . "S") (eq . "B")) }}
-                    rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
-                    _, _, _ = rs1, rs2, imm
-    {{- else if (or (eq . "U") (eq . "J")) }}
-                    rd, imm := t.Rd, t.Imm
-                    _, _ = rd, imm
-    {{- end }}
+	{{- if eq . "R" }}
+					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
+					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
+	{{- else if eq . "I" }}
+					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
+					_, _, _ = rs1, rd, imm
+	{{- else if (or (eq . "S") (eq . "B")) }}
+					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
+					_, _, _ = rs1, rs2, imm
+	{{- else if (or (eq . "U") (eq . "J")) }}
+					rd, imm := t.Rd, t.Imm
+					_, _ = rd, imm
+	{{- end }}
 {{- end }}
-                    {{ .Action1}}
-                    {{.Action2}}
-			    }else{
-				    log.Panicln("Instruction Type mismatch!")
-			    }
-			    return
-		        },
-        },
-    {{- end}}
+					{{ .Action1}}
+					{{.Action2}}
+				}else{
+					log.Panicln("Instruction Type mismatch!")
+				}
+				return
+				},
+		},
+	{{- end}}
 }
