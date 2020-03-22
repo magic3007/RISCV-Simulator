@@ -38,7 +38,7 @@ func TestSingleStep(t *testing.T) {
 		expected []string
 	}{
 		{"add", "/../test_data/add.out",
-			[]string{"addi", "sd", "addi", "sw", "sw"},
+			[]string{"addi", "sd", "addi", "sw", "sw", "jal", "lw"},
 			},
 	}
 	log.SetFlags(log.Llongfile | log.LstdFlags)
@@ -48,7 +48,7 @@ func TestSingleStep(t *testing.T) {
 			sim := NewSimulator(filepath)
 			sim.LoadMemory()
 			for _, expectInst := range test.expected{
-				item := sim.SingleStep()
+				item, _ := sim.SingleStep()
 				assert.Equal(t, expectInst, item.Name)
 			}
 		})

@@ -17,17 +17,27 @@ type Simulator struct {
 	M       memory.Memory64
 	R       register.Heap64
 	PC      uint64
-	elfFile *elf.File
+	ElfFile *elf.File
 }
 
 func NewSimulator(elfFilePath string) *Simulator {
 	file, err := elf.Open(elfFilePath)
 	utils.PANIC_CHECK(err)
-	return &Simulator{elfFile: file}
+	return &Simulator{ElfFile: file}
+}
+
+func (sim *Simulator) FindSymbolFromName(name string) (*elf.Symbol, bool) {
+	symbols, _  := sim.ElfFile.Symbols()
+	for _, symbol := range symbols {
+		if symbol.Name == name{
+			return &symbol, true
+		}
+	}
+	return nil, false
 }
 
 func (sim *Simulator) LoadMemory() {
-	file := sim.elfFile
+	file := sim.ElfFile
 	for _, prog := range file.Progs{
 		if prog.Type == elf.PT_LOAD{
 			vaddr, memsz, filesz := prog.Vaddr, prog.Memsz, prog.Filesz
@@ -44,18 +54,13 @@ func (sim *Simulator) LoadMemory() {
 	sim.R.StoreByName("sp", STACK_TOP)
 
 	//! Magic: start from |main| function instead of the entry in elf file
-	symbols, _  := file.Symbols()
-	found := false
-	for _, symbol := range symbols {
-		if symbol.Name == "main"{
-			sim.PC = symbol.Value
-			found = true
-			break
-		}
+	if symbol, found := sim.FindSymbolFromName("main"); found{
+		sim.PC = symbol.Value
+		sim.R.StoreByName("x1", 0) // set the return address of |main| function mandatorily
+	}else{
+		log.Fatalln("Can not find the symbol named \"main\"")
 	}
-	if found == false{
-		log.Fatalln("Can not find the symbol named \"main\"");
-	}
+
 }
 
 func Match(code uint32) (item *Action, err error) {
@@ -67,7 +72,13 @@ func Match(code uint32) (item *Action, err error) {
 	return nil, errors.New("unknown instruction format")
 }
 
-func (sim *Simulator) SingleStep() *Action {
+func (sim *Simulator) HasFinished() bool {
+	return sim.PC == 0
+}
+func (sim *Simulator) SingleStep() (*Action, error) {
+	if sim.HasFinished(){
+		return nil, errors.New("the program has finished")
+	}
 	m := sim.M
 	code := m.LoadU32(sim.PC)
 	if isa.InstructionLength(code) != 32{
@@ -79,5 +90,5 @@ func (sim *Simulator) SingleStep() *Action {
 	}
 	inst := item.Inst(code)
 	item.Exec(sim, inst)
-	return item
+	return item, nil
 }
