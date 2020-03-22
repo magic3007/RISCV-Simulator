@@ -36,8 +36,16 @@ func fromString(name string) uint8{
 			}
 		}
 	}
-	log.Panicf("No such register name: %s", name);
-	return 0;
+	log.Panicf("No such register name: %s", name)
+	return 0
+}
+
+/*
+* @return use the last items in register name list by default
+*/
+func NamefromIndex(index uint8) string{
+	lst := RegName[index]
+	return lst[len(lst)-1]
 }
 
 /**
