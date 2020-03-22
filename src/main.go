@@ -2,15 +2,18 @@ package main
 
 import (
 	"debug/elf"
+	"debugger"
 	"flag"
 	"fmt"
+	"log"
 	"simulator"
 	"utils"
 )
 
 var (
-	verbose  = flag.Bool("v", true, "Display verbose info of ELF file")
-	filepath = flag.String("f", "", "filepath of the ELF file")
+	verbose  = flag.Bool("v", true, "Display verbose info of ELF file. To disable displaying these info, type \"-v=0\"")
+	filepath = flag.String("f", "", "Filepath of the ELF file")
+	mode = flag.String("m", "debug", "Simulation mode. Valid mode are: debug, pipeline")
 )
 
 func statElf(file *elf.File){
@@ -24,6 +27,7 @@ func statElf(file *elf.File){
 
 func main() {
 	utils.FlagInit([]string{"f"})
+	log.SetFlags(log.LstdFlags | log.Llongfile)
 	file, err := elf.Open(*filepath)
 	utils.PANIC_CHECK(err)
 	defer file.Close()
@@ -32,4 +36,12 @@ func main() {
 	}
 	sim := simulator.NewSimulator(*filepath)
 	sim.LoadMemory()
+	switch *mode{
+	case "debug":
+		var d debugger.Debugger
+		d.RunPrompt(sim)
+	default:
+		err := fmt.Errorf("unvalid mode")
+		fmt.Print(err.Error())
+	}
 }
