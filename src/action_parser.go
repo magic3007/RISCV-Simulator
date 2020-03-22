@@ -44,6 +44,7 @@ type Action struct {
     BitConstraint string
     Action1 string
     Action2 string
+    DisplayFormat string
 }
 
 func main() {
@@ -79,6 +80,7 @@ func main() {
     		BitConstraint: line[5],
     		Action1: reformat(line[6]),
     		Action2: reformat(line[7]),
+    		DisplayFormat: line[8],
         }
         actionSet = append(actionSet, data)
     }

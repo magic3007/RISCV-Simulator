@@ -17,6 +17,7 @@ type Action struct{
 	Name string
 	Pred func (uint32) bool
 	Inst func (uint32) isa.Instruction
+	ToString func (isa.Instruction) string
 	Exec func (*Simulator, isa.Instruction)
 }
 
@@ -30,10 +31,13 @@ var ActionSet = []Action{
 			Inst: func (inst uint32) isa.Instruction {
 				return isa.New{{- .Type -}}Instruction(inst)
 			},
+			ToString: func (inst isa.Instruction) string {
+				return "{{.Name}} " + isa.To{{.DisplayFormat}}Format(inst)
+			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
 				m, r, pc := &sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
-				if t, ok := inst.(*isa.{{- .Type -}}Instruction); ok{
+				if t, ok := inst.(isa.{{- .Type -}}Instruction); ok{
 {{- block "ExtractVariable" .Type }}
 	{{- if eq . "R" }}
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
