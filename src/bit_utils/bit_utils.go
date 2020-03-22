@@ -37,3 +37,7 @@ func SetBit(value uint64, index uint32, targetBit uint64) uint64{
 func SignExtU64(x int32) uint64{
 	return uint64(int64(x))
 }
+
+func UnSignExtU64(x int32) uint64{
+	return uint64(uint32(x))
+}
