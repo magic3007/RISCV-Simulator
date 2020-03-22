@@ -22,8 +22,9 @@ void qsort(int l,int r)
 
 int main()  
 {
-	for(int i=40;i>=1;i--)
-		result[i]=i;
+	for(int i = 0; i < 39; i++){
+		result[i] = 39 - i;
+	}
 	qsort(0,39);
 	return 0;
 }  
