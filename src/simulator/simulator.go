@@ -11,7 +11,7 @@ import (
 )
 
 var STACK_TOP uint64 = 0x7fffff_fff000
-var STACK_SIZE uint64 = 4096
+var STACK_SIZE uint64 = 4096 << 10
 
 type Simulator struct {
 	M       memory.Memory64
