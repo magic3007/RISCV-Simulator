@@ -42,3 +42,43 @@ func TestConcatenateSignExtBits(t *testing.T) {
 		})
 	}
 }
+
+func TestMulI64I64(t *testing.T) {
+	tests := []struct {
+		name string
+		x int64
+		y int64
+		expected_hi int64
+		expected_lo int64
+	}{
+		{"test1", -1, 1, -1, -1},
+	}
+	log.SetFlags(log.Llongfile | log.LstdFlags)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			hi, lo := MulI64I64(test.x, test.y)
+			assert.Equal(t, test.expected_hi, hi)
+			assert.Equal(t, test.expected_lo, lo)
+		})
+	}
+}
+
+func TestMulI64U64(t *testing.T) {
+	tests := []struct {
+		name string
+		x int64
+		y uint64
+		expected_hi int64
+		expected_lo int64
+	}{
+		{"test1", -1<<63, 1<<3, (^0)-3, 0},
+	}
+	log.SetFlags(log.Llongfile | log.LstdFlags)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			hi, lo := MulI64U64(test.x, test.y)
+			assert.Equal(t, test.expected_hi, hi)
+			assert.Equal(t, test.expected_lo, lo)
+		})
+	}
+}

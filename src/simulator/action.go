@@ -61,7 +61,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=r.Load(rs1), r.Load(rs2); _,lo:=bits.Mul64(t1,t2); r.Store(rd, lo)
+					t1, t2:=r.Load(rs1), r.Load(rs2); _,lo:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(lo))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -133,7 +133,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bits.Mul64(t1,t2); r.Store(rd, hi)
+					t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(hi))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -733,7 +733,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=int32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(int32(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4))))
+					t1:=int32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4)))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -853,7 +853,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=int32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(int32(t1>>shamt)))
+					t1, t2:=int32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(t1>>shamt))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1165,7 +1165,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bits.Mul64(t1,t2); r.Store(rd, hi)
+					t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64U64(int64(t1),t2); r.Store(rd, uint64(hi))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1261,7 +1261,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 * t2)))
+					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 * t2))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1285,7 +1285,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 / t2)))
+					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 / t2))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1333,7 +1333,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
 					_, _, _ = rs1, rs2, rd // Ensure any variable is used once
-					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 % t2)))
+					t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 % t2))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
