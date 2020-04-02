@@ -1,57 +1,57 @@
-﻿Instruction,Type,Opcode,Funct3,Funct7,BitConstraint,Action1,Action2,DisplayFormat
-add,R,0x33,0x0,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 + t2);",*pc += 4;,DSS
-mul,R,0x33,0x0,0x01,,"t1, t2:=r.Load(rs1), r.Load(rs2); _,lo:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(lo));",*pc += 4;,DSS
-sub,R,0x33,0x0,0x20,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 - t2);",*pc += 4;,DSS
-sll,R,0x33,0x1,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 << t2);",*pc += 4;,DSS
-mulh,R,0x33,0x1,0x01,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(hi));",*pc += 4;,DSS
-slt,R,0x33,0x2,0x00,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t1<t2 {r.Store(rd, 1)} else{r.Store(rd, 0)};",*pc += 4;,DSS
-xor,R,0x33,0x4,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 ^ t2);",*pc += 4;,DSS
-div,R,0x33,0x4,0x01,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t2==0 {r.Store(rd, bit_utils.SignExtU64(-1))} else if t1==-(1<<(XLEN-1)) && t2==-1 {r.Store(rd, uint64(1)<<(XLEN-1))} else {r.Store(rd, uint64(t1 / t2))}",*pc += 4;,DSS
-srl,R,0x33,0x5,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 >> t2);",*pc += 4;,DSS
-sra,R,0x33,0x5,0x20,,"t1, t2:=r.Load(rs1), r.Load(rs2); v:=int64(t1)>>t2;r.Store(rd, uint64(v));",*pc += 4;,DSS
-or,R,0x33,0x6,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 | t2);",*pc += 4;,DSS
-rem,R,0x33,0x6,0x01,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t2==0 {r.Store(rd, uint64(t1))} else if t1==-(1<<(XLEN-1)) && t2==-1 {r.Store(rd, 0)} else {r.Store(rd, uint64(t1 % t2))}",*pc += 4;,DSS
-and,R,0x33,0x7,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 & t2);",*pc += 4;,DSS
-lb,I,0x03,0x0,,,"t1:=r.Load(rs1); v:= uint64(int64(int8(m.LoadU8(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS
-lh,I,0x03,0x1,,,"t1:=r.Load(rs1); v:= uint64(int64(int16(m.LoadU16(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS
-lw,I,0x03,0x2,,,"t1:=r.Load(rs1); v:= uint64(int64(int32(m.LoadU32(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS
-ld,I,0x03,0x3,,,"t1:=r.Load(rs1); v:= uint64(int64(m.LoadU64(t1 + bit_utils.SignExtU64(imm)))); r.Store(rd, v);",*pc += 4;,DIS
-lwu,I,0x03,0b110,,,"t1:=r.Load(rs1); v:= uint64(int64(int32(m.LoadU32(t1 + bit_utils.UnSignExtU64(imm))))); r.Store(rd, v);",*pc += 4,DIS
-addi,I,0x13,0x0,,,"t1:=r.Load(rs1); r.Store(rd, t1 + bit_utils.SignExtU64(imm));",*pc += 4;,DSI
-slli,I,0x13,0x1,,"[3]uint32{26, 31, 0}","t1:=r.Load(rs1); r.Store(rd, t1 << bit_utils.U32Bits(uint32(imm), 0, 5))",*pc += 4;,DSI
-slti,I,0x13,0x2,,,"t1:=int64(r.Load(rs1)); if t1 < int64(imm) { r.Store(rd, 1)} else {r.Store(rd,0)} ",*pc += 4;,DSI
-xori,I,0x13,0x4,,,"t1:=r.Load(rs1); r.Store(rd, t1 ^ bit_utils.SignExtU64(imm));",*pc += 4;,DSI
-srli,I,0x13,0x5,,"[3]uint32{26, 31, 0}","t1:=r.Load(rs1); r.Store(rd, t1 >> bit_utils.U32Bits(uint32(imm), 0, 5))",*pc += 4;,DSI
-srai,I,0x13,0x5,,"[3]uint32{26, 31, 0x10}","t1:=int64(r.Load(rs1)); r.Store(rd, uint64(t1 >>bit_utils.U32Bits(uint32(imm), 0, 5)))",*pc += 4;,DSI
-ori,I,0x13,0x6,,,"t1:=r.Load(rs1); r.Store(rd, t1 | bit_utils.SignExtU64(imm));",*pc += 4;,DSI
-andi,I,0x13,0x7,,,"t1:=r.Load(rs1); r.Store(rd, t1 & bit_utils.SignExtU64(imm));",*pc += 4;,DSI
-addiw,I,0x1B,0x0,,,"t1:=r.Load(rs1); r.Store(rd, bit_utils.SignExtU64(int32(t1) + imm))",*pc += 4;,DSI
-slliw,I,0b0011011,0b001,,"[3]uint32{25, 31, 0x0}","t1:=uint32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(int32(t1 << bit_utils.U32Bits(uint32(imm), 0, 4))))",*pc += 4;,DSI
-srliw,I,0b0011011,0b101,,"[3]uint32{25, 31, 0x0}","t1:=uint32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(int32(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4))))",*pc += 4;,DSI
-sraiw,I,0b0011011,0b101,,"[3]uint32{25, 31, 0b0100000}","t1:=int32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4)))",*pc += 4;,DSI
-addw,R,0b0111011,0b000,0b0000000,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, bit_utils.SignExtU64(int32(t1)+int32(t2)))",*pc += 4;,DSS
-subw,R,0b0111011,0b000,0b0100000,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, bit_utils.SignExtU64(int32(t1)-int32(t2)))",*pc += 4;,DSS
-sllw,R,0b0111011,0b001,0b0000000,,"t1, t2:=uint32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(int32(t1<<shamt)))",*pc += 4;,DSS
-srlw,R,0b0111011,0b101,0b0000000,,"t1, t2:=uint32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(int32(t1>>shamt)))",*pc += 4;,DSS
-sraw,R,0b0111011,0b101,0b0100000,,"t1, t2:=int32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(t1>>shamt))",*pc += 4;,DSS
-jalr,I,0x67,0x0,,,"t1:=r.Load(rs1); r.Store(rd, *pc + 4)","*pc = bit_utils.SetBit(t1 + bit_utils.SignExtU64(imm), 0, 0);",DSI
-sb,S,0x23,0x0,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU8(addr, uint8(t2));",*pc += 4;,SIS
-sh,S,0x23,0x1,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU16(addr, uint16(t2));",*pc += 4;,SIS
-sw,S,0x23,0x2,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU32(addr, uint32(t2));",*pc += 4;,SIS
-sd,S,0x23,0x3,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU64(addr, t2);",*pc += 4;,SIS
-beq,B,0x63,0x0,,,"t1, t2:=r.Load(rs1), r.Load(rs2)",if t1==t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI
-bne,B,0x63,0x1,,,"t1, t2:=r.Load(rs1), r.Load(rs2)",if t1!=t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI
-blt,B,0x63,0x4,,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2));",if t1<t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI
-bge,B,0x63,0x5,,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2));",if t1>=t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI
-auipc,U,0x17,,,,"r.Store(rd, *pc + (bit_utils.SignExtU64(imm)));",*pc += 4;,DI
-lui,U,0x37,,,,"r.Store(rd, bit_utils.SignExtU64(imm));",*pc += 4;,DI
-jal,J,0x6f,,,,"r.Store(rd, *pc + 4);",*pc += bit_utils.SignExtU64(imm),DI
-mulhsu,R,0b0110011,0b010,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64U64(int64(t1),t2); r.Store(rd, uint64(hi));",*pc += 4,DSS
-mulhu,R,0b0110011,0b011,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bits.Mul64(t1,t2); r.Store(rd, hi);",*pc += 4,DSS
-dviu,R,0b0110011,0b100,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 / t2)",*pc += 4,DSS
-remu,R,0b0110011,0b111,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 % t2)",*pc += 4,DSS
-mulw,R,0b0111011,0b000,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 * t2))",*pc += 4,DSS
-divw,R,0b0111011,0b100,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 / t2))",*pc += 4,DSS
-divuw,R,0b0111011,0b101,0b0000001,,"t1, t2:=uint32(r.Load(rs1)), uint32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 / t2)))",*pc += 4,DSS
-remw,R,0b0111011,0b110,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 % t2))",*pc += 4,DSS
-remuw,R,0b0111011,0b111,0b0000001,,"t1, t2:=uint32(r.Load(rs1)), uint32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 % t2)))",*pc += 4,DSS
+﻿Instruction,Type,Opcode,Funct3,Funct7,BitConstraint,Action1,Action2,DisplayFormat,IsBranch,IsIndirectJump,MemoryAccessFunction,ALUFunction,ValCFunction,PositiveOptionPC,NegativeOptionPC,MStagePeriod,EStagePeriod,dstE,dstM
+add,R,0x33,0x0,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 + t2);",*pc += 4;,DSS,false,false,,output=t1+t2,,return pc+4,return 0,,,Rd,
+mul,R,0x33,0x0,0x01,,"t1, t2:=r.Load(rs1), r.Load(rs2); _,lo:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(lo));",*pc += 4;,DSS,false,false,,"_,lo:=bit_utils.MulI64I64(int64(t1),int64(t2)); output=uint64(lo)",,return pc+4,return 0,,,Rd,
+sub,R,0x33,0x0,0x20,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 - t2);",*pc += 4;,DSS,false,false,,output=t1-t2,,return pc+4,return 0,,,Rd,
+sll,R,0x33,0x1,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 << t2);",*pc += 4;,DSS,false,false,,output=t1<<t2,,return pc+4,return 0,,,Rd,
+mulh,R,0x33,0x1,0x01,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64I64(int64(t1),int64(t2)); r.Store(rd, uint64(hi));",*pc += 4;,DSS,false,false,,"hi,_:=bit_utils.MulI64I64(int64(t1),int64(t2)); output=uint64(hi)",,return pc+4,return 0,,,Rd,
+slt,R,0x33,0x2,0x00,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t1<t2 {r.Store(rd, 1)} else{r.Store(rd, 0)};",*pc += 4;,DSS,false,false,,if t1<t2{output=1}else{output=0},,return pc+4,return 0,,,Rd,
+xor,R,0x33,0x4,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 ^ t2);",*pc += 4;,DSS,false,false,,output=t1^t2,,return pc+4,return 0,,,Rd,
+div,R,0x33,0x4,0x01,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t2==0 {r.Store(rd, bit_utils.SignExtU64(-1))} else if t1==-(1<<(XLEN-1)) && t2==-1 {r.Store(rd, uint64(1)<<(XLEN-1))} else {r.Store(rd, uint64(t1 / t2))}",*pc += 4;,DSS,false,false,, if t2==0 {output=bit_utils.SignExtU64(-1)} else if int64(t1)==-(1<<(XLEN-1)) && int64(t2)==-1 {output=uint64(1)<<(XLEN-1)} else {output=uint64(int64(t1) / int64(t2))},,return pc+4,return 0,,15,Rd,
+srl,R,0x33,0x5,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 >> t2);",*pc += 4;,DSS,false,false,,output=t1>>t2,,return pc+4,return 0,,,Rd,
+sra,R,0x33,0x5,0x20,,"t1, t2:=r.Load(rs1), r.Load(rs2); v:=int64(t1)>>t2;r.Store(rd, uint64(v));",*pc += 4;,DSS,false,false,,output=uint64(int64(t1)>>t2),,return pc+4,return 0,,,Rd,
+or,R,0x33,0x6,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 | t2);",*pc += 4;,DSS,false,false,,output=t1|t2,,return pc+4,return 0,,,Rd,
+rem,R,0x33,0x6,0x01,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2)); if t2==0 {r.Store(rd, uint64(t1))} else if t1==-(1<<(XLEN-1)) && t2==-1 {r.Store(rd, 0)} else {r.Store(rd, uint64(t1 % t2))}",*pc += 4;,DSS,false,false,,if t2==0 {output=t1} else if int64(t1)==-(1<<(XLEN-1)) && int64(t2)==-1 {output=0} else {output=uint64(int64(t1)%int64(t2))},,return pc+4,return 0,,15,Rd,
+and,R,0x33,0x7,0x00,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 & t2);",*pc += 4;,DSS,false,false,,output=t1&t2,,return pc+4,return 0,,,Rd,
+lb,I,0x03,0x0,,,"t1:=r.Load(rs1); v:= uint64(int64(int8(m.LoadU8(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS,false,false,output=uint64(int64(int8(m.LoadU8(addr)))),output=t1 + bit_utils.SignExtU64(Imm),,return pc+4,return 0,Read_data_memory_period,,,Rd
+lh,I,0x03,0x1,,,"t1:=r.Load(rs1); v:= uint64(int64(int16(m.LoadU16(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS,false,false,output=uint64(int64(int16(m.LoadU16(addr)))),output=t1 + bit_utils.SignExtU64(Imm),,return pc+4,return 0,Read_data_memory_period,,,Rd
+lw,I,0x03,0x2,,,"t1:=r.Load(rs1); v:= uint64(int64(int32(m.LoadU32(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v);",*pc += 4;,DIS,false,false,output=uint64(int64(int32(m.LoadU32(addr)))),output=t1 + bit_utils.SignExtU64(Imm),,return pc+4,return 0,Read_data_memory_period,,,Rd
+ld,I,0x03,0x3,,,"t1:=r.Load(rs1); v:= uint64(int64(m.LoadU64(t1 + bit_utils.SignExtU64(imm)))); r.Store(rd, v);",*pc += 4;,DIS,false,false,output=uint64(int64(m.LoadU64(addr))),output=t1 + bit_utils.SignExtU64(Imm),,return pc+4,return 0,Read_data_memory_period,,,Rd
+lwu,I,0x03,0b110,,,"t1:=r.Load(rs1); v:= uint64(m.LoadU32(t1 + bit_utils.UnSignExtU64(imm))); r.Store(rd, v);",*pc += 4,DIS,false,false,output=uint64(m.LoadU32(addr)),output=t1 + bit_utils.UnSignExtU64(Imm),,return pc+4,return 0,,,,Rd
+addi,I,0x13,0x0,,,"t1:=r.Load(rs1); r.Store(rd, t1 + bit_utils.SignExtU64(imm));",*pc += 4;,DSI,false,false,,output=t1 + bit_utils.SignExtU64(Imm),,return pc+4,return 0,,,Rd,
+slli,I,0x13,0x1,,"[3]uint32{26, 31, 0}","t1:=r.Load(rs1); r.Store(rd, t1 << bit_utils.U32Bits(uint32(imm), 0, 5))",*pc += 4;,DSI,false,false,,"output=t1 << bit_utils.U32Bits(uint32(Imm), 0, 5)",,return pc+4,return 0,,,Rd,
+slti,I,0x13,0x2,,,"t1:=int64(r.Load(rs1)); if t1 < int64(imm) { r.Store(rd, 1)} else {r.Store(rd,0)} ",*pc += 4;,DSI,false,false,,if int64(t1)<int64(Imm){output=1}else{output=0},,return pc+4,return 0,,,Rd,
+xori,I,0x13,0x4,,,"t1:=r.Load(rs1); r.Store(rd, t1 ^ bit_utils.SignExtU64(imm));",*pc += 4;,DSI,false,false,,output=t1 ^ bit_utils.SignExtU64(Imm),,return pc+4,return 0,,,Rd,
+srli,I,0x13,0x5,,"[3]uint32{26, 31, 0}","t1:=r.Load(rs1); r.Store(rd, t1 >> bit_utils.U32Bits(uint32(imm), 0, 5))",*pc += 4;,DSI,false,false,,"output=t1 >> bit_utils.U32Bits(uint32(Imm), 0, 5)",,return pc+4,return 0,,,Rd,
+srai,I,0x13,0x5,,"[3]uint32{26, 31, 0x10}","t1:=int64(r.Load(rs1)); r.Store(rd, uint64(t1 >>bit_utils.U32Bits(uint32(imm), 0, 5)))",*pc += 4;,DSI,false,false,,"output=uint64(int64(t1) >>bit_utils.U32Bits(uint32(Imm), 0, 5))",,return pc+4,return 0,,,Rd,
+ori,I,0x13,0x6,,,"t1:=r.Load(rs1); r.Store(rd, t1 | bit_utils.SignExtU64(imm));",*pc += 4;,DSI,false,false,,output=t1 | bit_utils.SignExtU64(Imm),,return pc+4,return 0,,,Rd,
+andi,I,0x13,0x7,,,"t1:=r.Load(rs1); r.Store(rd, t1 & bit_utils.SignExtU64(imm));",*pc += 4;,DSI,false,false,,output=t1 & bit_utils.SignExtU64(Imm),,return pc+4,return 0,,,Rd,
+addiw,I,0x1B,0x0,,,"t1:=r.Load(rs1); r.Store(rd, bit_utils.SignExtU64(int32(t1) + imm))",*pc += 4;,DSI,false,false,,output=bit_utils.SignExtU64(int32(t1) + Imm),,return pc+4,return 0,,,Rd,
+slliw,I,0b0011011,0b001,,"[3]uint32{25, 31, 0x0}","t1:=uint32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(int32(t1 << bit_utils.U32Bits(uint32(imm), 0, 4))))",*pc += 4;,DSI,false,false,,"output=bit_utils.SignExtU64(int32(uint32(t1) << bit_utils.U32Bits(uint32(Imm), 0, 4)))",,return pc+4,return 0,,,Rd,
+srliw,I,0b0011011,0b101,,"[3]uint32{25, 31, 0x0}","t1:=uint32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(int32(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4))))",*pc += 4;,DSI,false,false,,"output=bit_utils.SignExtU64(int32(uint32(t1) >> bit_utils.U32Bits(uint32(Imm), 0, 4)))",,return pc+4,return 0,,,Rd,
+sraiw,I,0b0011011,0b101,,"[3]uint32{25, 31, 0b0100000}","t1:=int32(r.Load(rs1)); r.Store(rd, bit_utils.SignExtU64(t1 >> bit_utils.U32Bits(uint32(imm), 0, 4)))",*pc += 4;,DSI,false,false,,"output= bit_utils.SignExtU64(int32(t1) >> bit_utils.U32Bits(uint32(Imm), 0, 4))",,return pc+4,return 0,,,Rd,
+addw,R,0b0111011,0b000,0b0000000,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, bit_utils.SignExtU64(int32(t1)+int32(t2)))",*pc += 4;,DSS,false,false,,output=bit_utils.SignExtU64(int32(t1)+int32(t2)),,return pc+4,return 0,,,Rd,
+subw,R,0b0111011,0b000,0b0100000,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, bit_utils.SignExtU64(int32(t1)-int32(t2)))",*pc += 4;,DSS,false,false,,output=bit_utils.SignExtU64(int32(t1)-int32(t2)),,return pc+4,return 0,,,Rd,
+sllw,R,0b0111011,0b001,0b0000000,,"t1, t2:=uint32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(int32(t1<<shamt)))",*pc += 4;,DSS,false,false,,"shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(uint32(t1)<<shamt))",,return pc+4,return 0,,,Rd,
+srlw,R,0b0111011,0b101,0b0000000,,"t1, t2:=uint32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(int32(t1>>shamt)))",*pc += 4;,DSS,false,false,,"shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(uint32(t1)>>shamt))",,return pc+4,return 0,,,Rd,
+sraw,R,0b0111011,0b101,0b0100000,,"t1, t2:=int32(r.Load(rs1)), r.Load(rs2); shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); r.Store(rd, bit_utils.SignExtU64(t1>>shamt))",*pc += 4;,DSS,false,false,,"shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(t1)>>shamt)",,return pc+4,return 0,,,Rd,
+jalr,I,0x67,0x0,,,"t1:=r.Load(rs1); r.Store(rd, *pc + 4)","*pc = bit_utils.SetBit(t1 + bit_utils.SignExtU64(imm), 0, 0);",DSI,false,true,,"output=bit_utils.SetBit(t1 + bit_utils.SignExtU64(Imm), 0, 0)",,return 0,return 0,,,Rd,
+sb,S,0x23,0x0,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU8(addr, uint8(t2));",*pc += 4;,SIS,false,false,"m.StoreU8(addr, uint8(input))",output=t1+bit_utils.SignExtU64(Imm),,return pc+4,return 0,Store_data_memory_period,,,
+sh,S,0x23,0x1,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU16(addr, uint16(t2));",*pc += 4;,SIS,false,false,"m.StoreU16(addr, uint16(input))",output=t1+bit_utils.SignExtU64(Imm),,return pc+4,return 0,Store_data_memory_period,,,
+sw,S,0x23,0x2,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU32(addr, uint32(t2));",*pc += 4;,SIS,false,false,"m.StoreU32(addr, uint32(input))",output=t1+bit_utils.SignExtU64(Imm),,return pc+4,return 0,Store_data_memory_period,,,
+sd,S,0x23,0x3,,,"t1,t2:=r.Load(rs1),r.Load(rs2);addr:=t1+bit_utils.SignExtU64(imm); m.StoreU64(addr, t2);",*pc += 4;,SIS,false,false,"m.StoreU64(addr, input)",output=t1+bit_utils.SignExtU64(Imm),,return pc+4,return 0,Store_data_memory_period,,,
+beq,B,0x63,0x0,,,"t1, t2:=r.Load(rs1), r.Load(rs2)",if t1==t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI,true,false,,isPredictError=!(t1==t2),,return pc+bit_utils.SignExtU64(Imm),return pc+4,,,,
+bne,B,0x63,0x1,,,"t1, t2:=r.Load(rs1), r.Load(rs2)",if t1!=t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI,true,false,,isPredictError=!(t1!=t2),,return pc+bit_utils.SignExtU64(Imm),return pc+4,,,,
+blt,B,0x63,0x4,,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2));",if t1<t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI,true,false,,isPredictError=!(int64(t1)<int64(t2)),,return pc+bit_utils.SignExtU64(Imm),return pc+4,,,,
+bge,B,0x63,0x5,,,"t1, t2:=int64(r.Load(rs1)), int64(r.Load(rs2));",if t1>=t2 {*pc+= bit_utils.SignExtU64(imm)} else {*pc += 4},SSI,true,false,,isPredictError=!(int64(t1)>=int64(t2)),,return pc+bit_utils.SignExtU64(Imm),return pc+4,,,,
+auipc,U,0x17,,,,"r.Store(rd, *pc + bit_utils.SignExtU64(imm))",*pc += 4;,DI,false,false,,output=ValC,valC=pc + bit_utils.SignExtU64(Imm),return pc+4,return 0,,,Rd,
+lui,U,0x37,,,,"r.Store(rd, bit_utils.SignExtU64(imm));",*pc += 4;,DI,false,false,,output=ValC,valC=bit_utils.SignExtU64(Imm),return pc+4,return 0,,,Rd,
+jal,J,0x6f,,,,"r.Store(rd, *pc + 4);",*pc += bit_utils.SignExtU64(imm),DI,false,false,,output=ValC,valC=pc+4,return pc+bit_utils.SignExtU64(Imm),return 0,,,Rd,
+mulhsu,R,0b0110011,0b010,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bit_utils.MulI64U64(int64(t1),t2); r.Store(rd, uint64(hi));",*pc += 4,DSS,false,false,,"hi,_:=bit_utils.MulI64U64(int64(t1),t2); output=uint64(hi)",,return pc+4,return 0,,,Rd,
+mulhu,R,0b0110011,0b011,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); hi,_:=bits.Mul64(t1,t2); r.Store(rd, hi);",*pc += 4,DSS,false,false,,"hi,_:=bits.Mul64(t1,t2); output=hi",,return pc+4,return 0,,,Rd,
+divu,R,0b0110011,0b100,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 / t2)",*pc += 4,DSS,false,false,,output=t1/t2,,return pc+4,return 0,,15,Rd,
+remu,R,0b0110011,0b111,0b0000001,,"t1, t2:=r.Load(rs1), r.Load(rs2); r.Store(rd, t1 % t2)",*pc += 4,DSS,false,false,,output=t1%t2,,return pc+4,return 0,,15,Rd,
+mulw,R,0b0111011,0b000,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 * t2))",*pc += 4,DSS,false,false,,output=bit_utils.SignExtU64(int32(t1) * int32(t2)),,return pc+4,return 0,,,Rd,
+divw,R,0b0111011,0b100,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 / t2))",*pc += 4,DSS,false,false,,output=bit_utils.SignExtU64(int32(t1) / int32(t2)),,return pc+4,return 0,,10,Rd,
+divuw,R,0b0111011,0b101,0b0000001,,"t1, t2:=uint32(r.Load(rs1)), uint32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 / t2)))",*pc += 4,DSS,false,false,,output=bit_utils.SignExtU64(int32(uint32(t1) / uint32(t2))),,return pc+4,return 0,,10,Rd,
+remw,R,0b0111011,0b110,0b0000001,,"t1, t2:=int32(r.Load(rs1)), int32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(t1 % t2))",*pc += 4,DSS,false,false,,output=bit_utils.SignExtU64(int32(t1) / int32(t2)),,return pc+4,return 0,,10,Rd,
+remuw,R,0b0111011,0b111,0b0000001,,"t1, t2:=uint32(r.Load(rs1)), uint32(r.Load(rs2)); r.Store(rd, bit_utils.SignExtU64(int32(t1 % t2)))",*pc += 4,DSS,false,false,,output=bit_utils.SignExtU64(int32(uint32(t1) % uint32(t2))),,return pc+4,return 0,,10,Rd,

@@ -1,0 +1,87 @@
+// Code generated, DO NOT EDIT.
+package {{.PACKAGE}}
+
+import (
+	{{- range $index, $value := .IMPORT}}
+		"{{$value}}"
+	{{- end}}
+)
+
+const (
+	{{- range $index, $element := .CONST}}
+		{{$index}} = {{$element}}
+	{{- end}}
+)
+
+type MicroAction struct {
+	Name string
+	Inst isa.Instruction
+	IsBranch bool
+	IsIndirectJump bool
+	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64)
+	ALUFunction func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64)
+	ValCFunction func(pc uint64, Imm int32) (valC uint64)
+	dstE, dstM uint8
+	PositiveOptionPC func(pc uint64, Imm int32) uint64
+	NegativeOptionPC func(pc uint64, Imm int32) uint64
+	MStagePeriod uint
+	EStagePeriod uint
+	InstToString func() string
+}
+
+var MicroActionConfigTable = []struct{
+	Name string
+	Pred func (code uint32) bool
+	Parse func (code uint32) *MicroAction
+}{
+	{{- range .ActionSet -}}
+		{
+			Name: "{{.Name}}",
+			Pred: func (inst uint32) bool {
+				return isa.IsMatch{{- .Type -}}Format({{.Opcode}},{{if ne .Funct3 ""}}{{.Funct3}},{{end}}{{if ne .Funct7 ""}}{{.Funct7}},{{end}} inst{{if ne .BitConstraint ""}},{{.BitConstraint}}{{end}})
+			},
+			Parse: func (code uint32) *MicroAction{
+				return &MicroAction{
+					Name: "{{.Name}}",
+					Inst: isa.New{{- .Type -}}Instruction(code),
+					IsBranch: {{.IsBranch}},
+					IsIndirectJump: {{.IsIndirectJump}},
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+						_, _, _ = m, addr, input // Ensure any variable is used once
+						output = 0
+						{{.MemoryAccessFunction}}
+						return
+					},
+					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
+						_, _, _, _ = t1, t2, Imm, ValC // Ensure any variable is used once
+						isPredictError = false
+						output = 0
+						{{.ALUFunction}}
+						return
+					},
+					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
+						_, _ = pc, Imm // Ensure any variable is used once
+						valC = 0
+						{{.ValCFunction}}
+						return
+					},
+					PositiveOptionPC: func(pc uint64, Imm int32) uint64{
+						_, _ = pc, Imm // Ensure any variable is used once
+						{{.PositiveOptionPC}}
+					},
+					NegativeOptionPC: func(pc uint64, Imm int32) uint64{
+						_, _ = pc, Imm // Ensure any variable is used once
+						{{.NegativeOptionPC}}
+					},
+					MStagePeriod: {{if ne .MStagePeriod ""}}{{.MStagePeriod}}{{else}}Pipeline_step_period{{end}},
+					EStagePeriod: {{if ne .EStagePeriod ""}}{{.EStagePeriod}}{{else}}Pipeline_step_period{{end}},
+					dstE: {{if ne .DstE ""}}isa.New{{- .Type -}}Instruction(code).{{.DstE}}{{else}}0{{end}},
+					dstM: {{if ne .DstM ""}}isa.New{{- .Type -}}Instruction(code).{{.DstM}}{{else}}0{{end}},
+					InstToString:  func() string{
+						return "{{.Name}} " + isa.To{{.DisplayFormat}}Format(isa.New{{- .Type -}}Instruction(code))
+					},
+				}
+			},
+		},
+	{{end}}
+}
