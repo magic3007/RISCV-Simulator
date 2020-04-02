@@ -141,6 +141,7 @@ func NewJInstruction(inst uint32) JInstruction {
 	}
 }
 
+
 //////////////////////////////////////////////////////////////// display format
 
 /*

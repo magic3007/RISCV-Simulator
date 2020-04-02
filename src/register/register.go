@@ -6,32 +6,32 @@ import (
 
 const RegNum = 32
 
-type Heap64 struct{
+type Heap64 struct {
 	regs [RegNum]uint64
 }
 
-func (rh *Heap64) Load(index uint8) uint64{
+func (rh *Heap64) Load(index uint8) uint64 {
 	return rh.regs[index]
 }
 
-func (rh *Heap64) Store(index uint8, value uint64){
-	if index != 0{
+func (rh *Heap64) Store(index uint8, value uint64) {
+	if index != 0 {
 		rh.regs[index] = value
 	}
 }
 
-func (rh *Heap64) LoadByName(name string) uint64{
+func (rh *Heap64) LoadByName(name string) uint64 {
 	return rh.Load(fromString(name))
 }
 
-func (rh *Heap64) StoreByName(name string, value uint64){
+func (rh *Heap64) StoreByName(name string, value uint64) {
 	rh.Store(fromString(name), value)
 }
 
-func fromString(name string) uint8{
-	for index, lst := range RegName{
-		for _, str := range lst{
-			if str == name{
+func fromString(name string) uint8 {
+	for index, lst := range RegName {
+		for _, str := range lst {
+			if str == name {
 				return uint8(index)
 			}
 		}
@@ -42,16 +42,16 @@ func fromString(name string) uint8{
 
 /*
 * @return use the last items in register name list by default
-*/
-func NamefromIndex(index uint8) string{
+ */
+func NamefromIndex(index uint8) string {
 	lst := RegName[index]
 	return lst[len(lst)-1]
 }
 
 /**
 Credit to https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf.
- */
-var RegName = [RegNum][]string {
+*/
+var RegName = [RegNum][]string{
 	/* 00 */ []string{"x0", "zero"},
 	/* 01 */ []string{"x1", /* return address */ "ra"},
 	/* 02 */ []string{"x2", /* stack pointer */ "sp"},
