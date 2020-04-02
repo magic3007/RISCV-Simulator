@@ -16,7 +16,7 @@ import (
 type Debugger struct {
 }
 
-func (d *Debugger) displayRegisters(r *register.Heap64) {
+func (d *Debugger) DisplayRegisters(r *register.Heap64) {
 	for i := uint8(0); i < register.RegNum; i++ {
 		fmt.Printf(" %4s: 0x%016x", register.NamefromIndex(i), r.Load(uint8(i)))
 		if i%5 == 4 {
@@ -25,7 +25,7 @@ func (d *Debugger) displayRegisters(r *register.Heap64) {
 	}
 }
 
-func (d *Debugger) displaySymbolAddr(sim *simulator.Simulator, name string) {
+func (d *Debugger) DisplaySymbolAddr(sim *simulator.Simulator, name string) {
 	if symbol, found := sim.FindSymbolFromName(name); found {
 		fmt.Printf("%-15s: 0x%016x\n", name, symbol.Value)
 	} else {
@@ -33,7 +33,7 @@ func (d *Debugger) displaySymbolAddr(sim *simulator.Simulator, name string) {
 	}
 }
 
-func (d *Debugger) displayAllSymbolAddr(sim *simulator.Simulator) {
+func (d *Debugger) DisplayAllSymbolAddr(sim *simulator.Simulator) {
 	symbols, _  := sim.ElfFile.Symbols()
 	for _, symbol := range symbols {
 		fmt.Printf("%-40s: 0x%016x\n", symbol.Name, symbol.Value)
@@ -46,7 +46,7 @@ func (d *Debugger) displayMemory(m *memory.Memory64, addr uint64, transformer fu
 	fmt.Printf("0x%016x:           "+format+"\n", addr)
 }
 
-func (d *Debugger) parserMemoryCommand(sim *simulator.Simulator, commands []string){
+func (d *Debugger) ParseMemoryCommand(sim *simulator.Simulator, commands []string){
 	memCommandRe := regexp.MustCompile("^x/([1-9]\\d*)([ibhwg])$")
 	submatches := memCommandRe.FindStringSubmatch(commands[0])
 	var addr, counter uint64
@@ -130,7 +130,7 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 	for true {
 		if !sim.HasFinished() {
 			fmt.Print("PC -> ")
-			d.parserMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
+			d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
 		}else{
 			fmt.Println("The program has ended.")
 		}
@@ -149,7 +149,7 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 		case commands[0] == "c":
 			var err error = nil
 			for !sim.HasFinished() && err == nil {
-				d.parserMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
+				d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
 				_, err = sim.SingleStep()
 			}
 		case commands[0] == "si":
@@ -157,18 +157,18 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 				fmt.Print(err)
 			}
 		case commands[0] == "reg":
-			d.displayRegisters(&sim.R)
+			d.DisplayRegisters(&sim.R)
 			fmt.Printf("\n %4s: 0x%016x\n","PC", sim.PC)
 		case commands[0] == "info":
 			if len(commands) == 1{
-				d.displayAllSymbolAddr(sim)
+				d.DisplayAllSymbolAddr(sim)
 			} else if len(commands) == 2 {
-				d.displaySymbolAddr(sim, commands[1])
+				d.DisplaySymbolAddr(sim, commands[1])
 			} else {
 				fmt.Println("Command Format Error. Type \"help\" for more info.")
 			}
 		case memCommandRe.MatchString(commands[0]):
-			d.parserMemoryCommand(sim, commands)
+			d.ParseMemoryCommand(sim, commands)
 		default:
 			fmt.Print("Unknown command. Type \"help\" for more info.")
 		}
