@@ -9,21 +9,21 @@ import (
 	"runtime"
 )
 
-func PANIC_CHECK(e error){
-	if e!=nil{
+func PANIC_CHECK(e error) {
+	if e != nil {
 		panic(e)
 	}
 }
 
-func FlagInit(required []string){
+func FlagInit(required []string) {
 	flag.Parse()
 	seen := make(map[string]bool)
 	flag.Visit(func(f *flag.Flag) {
 		seen[f.Name] = true
 	})
 	rv := true
-	for _, req := range required{
-		if !seen[req]{
+	for _, req := range required {
+		if !seen[req] {
 			_, _ = fmt.Fprintf(os.Stderr, "missing required argument: -%s\n", req)
 			rv = false
 		}
@@ -39,7 +39,7 @@ func RecursiveStatField(a interface{}, indent int) {
 	for i := 0; i < t.NumField(); i++ {
 		fmt.Print(string(make([]byte, indent)))
 		if t.Field(i).Type.Kind() != reflect.Struct {
-			switch t.Field(i).Type.Kind(){
+			switch t.Field(i).Type.Kind() {
 			case reflect.Uint64:
 				fmt.Printf("%-15v: 0x%016x\n", t.Field(i).Name, v.Field(i))
 			default:
@@ -54,17 +54,17 @@ func RecursiveStatField(a interface{}, indent int) {
 	}
 }
 
-func GetCurrentPath() string{
+func GetCurrentPath() string {
 	_, filename, _, _ := runtime.Caller(1)
-    return path.Dir(filename)
+	return path.Dir(filename)
 }
 
-func Filter(arr interface{}, cond func(interface{}) bool) interface{}{
+func Filter(arr interface{}, cond func(interface{}) bool) interface{} {
 	contentType := reflect.TypeOf(arr)
 	contentValue := reflect.ValueOf(arr)
 	newContent := reflect.MakeSlice(contentType, 0, 0)
-	for i:= 0; i < contentValue.Len(); i++ {
-		if content := contentValue.Index(i); cond(content.Interface()){
+	for i := 0; i < contentValue.Len(); i++ {
+		if content := contentValue.Index(i); cond(content.Interface()) {
 			newContent = reflect.Append(newContent, content)
 		}
 	}
