@@ -6,6 +6,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"pipedebug"
+	"pipeline"
 	"simulator"
 	"utils"
 )
@@ -13,7 +15,7 @@ import (
 var (
 	verbose  = flag.Bool("v", true, "Display verbose info of ELF file. To disable displaying these info, type \"-v=0\"")
 	filepath = flag.String("f", "", "Filepath of the ELF file")
-	mode = flag.String("m", "debug", "Simulation mode. Valid mode are: debug, pipeline")
+	mode = flag.String("m", "debug", "Simulation mode. Valid modes are: debug, pipeline")
 )
 
 func statElf(file *elf.File){
@@ -40,6 +42,10 @@ func main() {
 	case "debug":
 		var d debugger.Debugger
 		d.RunPrompt(sim)
+	case "pipeline":
+		var d pipedebug.PipeDebugger
+		pipe := pipeline.Pipe{Simulator: sim}
+		d.RunPrompt(&pipe)
 	default:
 		err := fmt.Errorf("unvalid mode")
 		fmt.Print(err.Error())
