@@ -20,7 +20,7 @@ This simulator functions in interactive mode like `gdb`. It provides following i
 
 - If you would like to compile your customized C source codes into RISC-V executable file, first of all, you must have <u>RISC-V Compiler Toolchain</u>. You can refer to respective online resources to install them in your environment. You can built the toolchain on your environment by yourself, or download a RISC-V GCC toolchain prebuilt under compatible environment. [Here](https://www.sifive.com/boards) is a recommended prebuilt toolchain provided by `SiFive`.
 
-  To further compile your customized C source codes, please refer to [this section](#How-to-compile-your-customized-C-source-codes-into-RISC-V-executable-file?) below.
+  To further compile your customized C source codes, please refer to [this section](#how-to-compile-your-customized-c-source-codes-into-risc-v-executable-file) below.
 
   
 
