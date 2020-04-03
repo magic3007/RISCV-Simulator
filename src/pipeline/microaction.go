@@ -959,7 +959,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
+					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
