@@ -2,6 +2,7 @@ package memory
 
 import (
 	"encoding/binary"
+	"fmt"
 	"log"
 )
 
@@ -36,7 +37,7 @@ func (m *Memory64) findSegment(addr uint64) (*memSegment64, bool) {
 			return &ms, true
 		}
 	}
-	log.Panicf("Segmentation Fault. addr = 0x%016x", addr)
+	panic(fmt.Sprintf("Segmentation Fault. addr = 0x%016x", addr))
 	return nil, false
 }
 
