@@ -6,6 +6,7 @@ import (
 	"log"
 	"reflect"
 	"simulator"
+	"statistic"
 )
 
 type Pipe struct {
@@ -29,12 +30,19 @@ type Pipe struct {
 	M_dstE, M_dstM   uint8
 	E_dstE, E_dstM   uint8
 	e_valE           uint64
+
+	// statistic
+	CycleCounter          statistic.Counter
+	ValidInstCountCounter statistic.Counter
+	JumpPredictionCounter statistic.RatioCounter
+	IndirectJumpCounter   statistic.Counter
 }
 
 func (p *Pipe) WriteBack() {
 	if !p.WReg.IsBubble {
 		p.R.Store(p.WReg.DstE, p.WReg.ValE)
 		p.R.Store(p.WReg.DstM, p.WReg.ValM)
+		p.ValidInstCountCounter.Tick()
 	}
 	p.WReg.Status = &NormalStatus{}
 }
@@ -194,6 +202,7 @@ func (p *Pipe) Fetch() (*MicroAction, error) {
 			rv = p.e_valE
 		}
 		if p.M_IsBranch && p.M_IsPredictError {
+			p.JumpPredictionCounter.TickNumerator()
 			rv = p.M_UnselectedPC
 		}
 		return rv
@@ -237,7 +246,12 @@ func (p *Pipe) Fetch() (*MicroAction, error) {
 		microInst.NegativeOptionPC(pc, Imm),
 	}
 
+	if microInst.IsBranch{
+		p.JumpPredictionCounter.TickDenominator()
+	}
+
 	if microInst.IsIndirectJump {
+		p.IndirectJumpCounter.Tick()
 		p.IsWaitingIndirectJump = true
 	} else {
 		p.PC = microInst.PositiveOptionPC(pc, Imm)
@@ -255,6 +269,7 @@ func (p *Pipe) SingleStep() (*MicroAction, error) {
 	if p.HasFinished() {
 		return nil, errors.New("the program has finished")
 	}
+	p.CycleCounter.Tick()
 	p.WriteBack()
 	p.AccessMemory()
 	p.Execute()

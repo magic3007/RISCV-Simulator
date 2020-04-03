@@ -65,6 +65,17 @@ func (d *PipeDebugger) RunPrompt(p *pipeline.Pipe) {
 		case commands[0] == "help":
 			d.Usage()
 		case commands[0] == "exit":
+			fmt.Println("[Statics]")
+			fmt.Printf("%-40s: %d\n", "Cycle Per Step", pipeline.Pipeline_step_period)
+			fmt.Printf("%-40s: %d\n", "# of Steps", p.CycleCounter.Count)
+			fmt.Printf("%-40s: %d\n", "# of Cycles", p.CycleCounter.Count * pipeline.Pipeline_step_period)
+			fmt.Printf("%-40s: %d\n", "# of Valid Instructions", p.CycleCounter.Count)
+			fmt.Printf("%-40s: %.5f\n", "CPI",
+				float32(p.CycleCounter.Count * pipeline.Pipeline_step_period)/float32(p.ValidInstCountCounter.Count))
+			fmt.Printf("%-40s: %d\n", "# of Indirect Jump", p.IndirectJumpCounter.Count)
+			fmt.Printf("%-40s: %.5f%%\n", "Jump Prediction Success Rate",
+				 100.0 * (1- float32(p.JumpPredictionCounter.Numerator.Count) /
+				float32(p.JumpPredictionCounter.Denominator.Count)))
 			goto done
 		case commands[0] == "status":
 			d.DisplayStatus(p)
