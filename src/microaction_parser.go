@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"text/template"
 	"utils"
 )
@@ -42,7 +43,7 @@ type MicroAction struct {
 	Funct3               string
 	Funct7               string
 	BitConstraint        string
-	DisplayFormat 		 string
+	DisplayFormat        string
 	IsBranch             string
 	IsIndirectJump       string
 	MemoryAccessFunction string
@@ -54,6 +55,7 @@ type MicroAction struct {
 	EStagePeriod         string
 	DstE                 string
 	DstM                 string
+	M_velE_Source        string
 }
 
 func main() {
@@ -81,8 +83,8 @@ func main() {
 			Funct7:               line[4],
 			BitConstraint:        line[5],
 			DisplayFormat:        line[8],
-			IsBranch:             line[9],
-			IsIndirectJump:       line[10],
+			IsBranch:             strings.ToLower(line[9]),
+			IsIndirectJump:       strings.ToLower(line[10]),
 			MemoryAccessFunction: line[11],
 			ALUFunction:          line[12],
 			ValCFunction:         line[13],
@@ -92,6 +94,7 @@ func main() {
 			EStagePeriod:         line[17],
 			DstE:                 line[18],
 			DstM:                 line[19],
+			M_velE_Source:        line[20],
 		}
 		actionSet = append(actionSet, data)
 	}

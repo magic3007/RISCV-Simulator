@@ -20,6 +20,7 @@ type MicroAction struct {
 	IsIndirectJump bool
 	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64)
 	ALUFunction func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64)
+	SelectM_valE func(e_valE uint64, valC uint64) uint64
 	ValCFunction func(pc uint64, Imm int32) (valC uint64)
 	dstE, dstM uint8
 	PositiveOptionPC func(pc uint64, Imm int32) uint64
@@ -58,6 +59,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						{{.ALUFunction}}
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return {{.M_velE_Source}}
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once

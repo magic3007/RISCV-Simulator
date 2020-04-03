@@ -7,7 +7,6 @@ import (
 	"os"
 	"pipeline"
 	"regexp"
-	"strconv"
 	"strings"
 	"utils"
 )
@@ -36,7 +35,8 @@ func (d *PipeDebugger) Usage() {
 	}, "\n"))
 }
 
-func DisplayStatus(p *pipeline.Pipe) {
+
+func (d *PipeDebugger) DisplayStatus(p *pipeline.Pipe) {
 	fmt.Println(p.WReg.ToString())
 	fmt.Println(p.MReg.ToString())
 	fmt.Println(p.EReg.ToString())
@@ -50,12 +50,10 @@ func (d *PipeDebugger) RunPrompt(p *pipeline.Pipe) {
 	fmt.Println("Start running...")
 	p.Initialize()
 	for true {
-		if !p.HasFinished() {
-			fmt.Print("PC -> ")
-			d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
-		} else {
+		if p.HasFinished(){
 			fmt.Println("The program has ended.")
 		}
+		d.DisplayPCInstruction(sim)
 		fmt.Print("(PipeDebug) ")
 		line, _ := lineReader.ReadString('\n')
 		line = strings.Trim(line, "\n")
@@ -69,20 +67,20 @@ func (d *PipeDebugger) RunPrompt(p *pipeline.Pipe) {
 		case commands[0] == "exit":
 			goto done
 		case commands[0] == "status":
-			DisplayStatus(p)
+			d.DisplayStatus(p)
 		case commands[0] == "c":
 			var err error = nil
-			count := 0
-			for !sim.HasFinished() && err == nil {
-				d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
+			for !p.HasFinished() && err == nil {
+				fmt.Println()
+				d.DisplayPCInstruction(sim)
 				_, err = p.SingleStep()
-				count += 1
+				d.DisplayStatus(p)
 			}
 		case commands[0] == "si":
 			if _, err := p.SingleStep(); err != nil {
 				fmt.Println(err)
 			}
-			DisplayStatus(p)
+			d.DisplayStatus(p)
 		case commands[0] == "reg":
 			d.DisplayRegisters(&sim.R)
 			fmt.Printf("\n %4s: 0x%016x\n", "PC", sim.PC)

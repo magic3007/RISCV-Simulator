@@ -19,6 +19,7 @@ type MicroAction struct {
 	IsIndirectJump bool
 	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64)
 	ALUFunction func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64)
+	SelectM_valE func(e_valE uint64, valC uint64) uint64
 	ValCFunction func(pc uint64, Imm int32) (valC uint64)
 	dstE, dstM uint8
 	PositiveOptionPC func(pc uint64, Imm int32) uint64
@@ -55,6 +56,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1+t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -104,6 +109,10 @@ var MicroActionConfigTable = []struct{
 						_,lo:=bit_utils.MulI64I64(int64(t1),int64(t2)); output=uint64(lo)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -151,6 +160,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1-t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -200,6 +213,10 @@ var MicroActionConfigTable = []struct{
 						output=t1<<t2
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -247,6 +264,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						hi,_:=bit_utils.MulI64I64(int64(t1),int64(t2)); output=uint64(hi)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -296,6 +317,10 @@ var MicroActionConfigTable = []struct{
 						if t1<t2{output=1}else{output=0}
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -343,6 +368,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1^t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -392,6 +421,10 @@ var MicroActionConfigTable = []struct{
 						 if t2==0 {output=bit_utils.SignExtU64(-1)} else if int64(t1)==-(1<<(XLEN-1)) && int64(t2)==-1 {output=uint64(1)<<(XLEN-1)} else {output=uint64(int64(t1) / int64(t2))}
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -439,6 +472,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1>>t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -488,6 +525,10 @@ var MicroActionConfigTable = []struct{
 						output=uint64(int64(t1)>>t2)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -535,6 +576,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1|t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -584,6 +629,10 @@ var MicroActionConfigTable = []struct{
 						if t2==0 {output=t1} else if int64(t1)==-(1<<(XLEN-1)) && int64(t2)==-1 {output=0} else {output=uint64(int64(t1)%int64(t2))}
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -631,6 +680,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1&t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -680,6 +733,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 + bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -727,6 +784,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1 + bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -776,6 +837,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 + bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -823,6 +888,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1 + bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -872,6 +941,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 + bit_utils.UnSignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -919,6 +992,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1 + bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -968,6 +1045,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 << bit_utils.U32Bits(uint32(Imm), 0, 5)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1015,6 +1096,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						if int64(t1)<int64(Imm){output=1}else{output=0}
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1064,6 +1149,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 ^ bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1111,6 +1200,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1 >> bit_utils.U32Bits(uint32(Imm), 0, 5)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1160,6 +1253,10 @@ var MicroActionConfigTable = []struct{
 						output=uint64(int64(t1) >>bit_utils.U32Bits(uint32(Imm), 0, 5))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1207,6 +1304,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1 | bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1256,6 +1357,10 @@ var MicroActionConfigTable = []struct{
 						output=t1 & bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1303,6 +1408,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=bit_utils.SignExtU64(int32(t1) + Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1352,6 +1461,10 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SignExtU64(int32(uint32(t1) << bit_utils.U32Bits(uint32(Imm), 0, 4)))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1399,6 +1512,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=bit_utils.SignExtU64(int32(uint32(t1) >> bit_utils.U32Bits(uint32(Imm), 0, 4)))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1448,6 +1565,10 @@ var MicroActionConfigTable = []struct{
 						output= bit_utils.SignExtU64(int32(t1) >> bit_utils.U32Bits(uint32(Imm), 0, 4))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1495,6 +1616,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=bit_utils.SignExtU64(int32(t1)+int32(t2))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1544,6 +1669,10 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SignExtU64(int32(t1)-int32(t2))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1591,6 +1720,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(uint32(t1)<<shamt))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1640,6 +1773,10 @@ var MicroActionConfigTable = []struct{
 						shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(uint32(t1)>>shamt))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1687,6 +1824,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						shamt:=bit_utils.U32Bits(uint32(t2), 0, 4); output=bit_utils.SignExtU64(int32(t1)>>shamt)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1736,10 +1877,14 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SetBit(t1 + bit_utils.SignExtU64(Imm), 0, 0)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return valC
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
-						
+						valC=pc+4
 						return
 					},
 					PositiveOptionPC: func(pc uint64, Imm int32) uint64{
@@ -1783,6 +1928,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1+bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1832,6 +1981,10 @@ var MicroActionConfigTable = []struct{
 						output=t1+bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1879,6 +2032,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1+bit_utils.SignExtU64(Imm)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -1928,6 +2085,10 @@ var MicroActionConfigTable = []struct{
 						output=t1+bit_utils.SignExtU64(Imm)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -1975,6 +2136,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						isPredictError=!(t1==t2)
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2024,6 +2189,10 @@ var MicroActionConfigTable = []struct{
 						isPredictError=!(t1!=t2)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2071,6 +2240,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						isPredictError=!(int64(t1)<int64(t2))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2120,6 +2293,10 @@ var MicroActionConfigTable = []struct{
 						isPredictError=!(int64(t1)>=int64(t2))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2167,6 +2344,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=ValC
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2216,6 +2397,10 @@ var MicroActionConfigTable = []struct{
 						output=ValC
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2263,6 +2448,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=ValC
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2312,6 +2501,10 @@ var MicroActionConfigTable = []struct{
 						hi,_:=bit_utils.MulI64U64(int64(t1),t2); output=uint64(hi)
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2359,6 +2552,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						hi,_:=bits.Mul64(t1,t2); output=hi
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2408,6 +2605,10 @@ var MicroActionConfigTable = []struct{
 						output=t1/t2
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2455,6 +2656,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=t1%t2
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2504,6 +2709,10 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SignExtU64(int32(t1) * int32(t2))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2551,6 +2760,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=bit_utils.SignExtU64(int32(t1) / int32(t2))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
@@ -2600,6 +2813,10 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SignExtU64(int32(uint32(t1) / uint32(t2)))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2648,6 +2865,10 @@ var MicroActionConfigTable = []struct{
 						output=bit_utils.SignExtU64(int32(t1) / int32(t2))
 						return
 					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
+					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
 						valC = 0
@@ -2695,6 +2916,10 @@ var MicroActionConfigTable = []struct{
 						output = 0
 						output=bit_utils.SignExtU64(int32(uint32(t1) % uint32(t2)))
 						return
+					},
+					SelectM_valE: func(e_valE uint64, valC uint64) uint64{
+						_, _ = e_valE, valC
+						return e_valE
 					},
 					ValCFunction: func(pc uint64, Imm int32) (valC uint64){
 						_, _ = pc, Imm // Ensure any variable is used once
