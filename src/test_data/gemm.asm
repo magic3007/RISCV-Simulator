@@ -80,7 +80,7 @@ Disassembly of section .text:
 #include <stdlib.h>
 
 int N, K, M;
-int A[3][3], B[3][3], C[3][3];
+int A[3][3], B[3][3], result[3][3];
 
 int main(){
    10188:	fd010113          	addi	sp,sp,-48
@@ -175,9 +175,9 @@ int main(){
             for(int j = 0; j < M; j++)
    102bc:	fc042e23          	sw	zero,-36(s0)
    102c0:	0d00006f          	j	10390 <main+0x208>
-                C[i][j] += A[i][k] * B[k][j];
+                result[i][j] += A[i][k] * B[k][j];
    102c4:	000127b7          	lui	a5,0x12
-   102c8:	f1078693          	addi	a3,a5,-240 # 11f10 <C>
+   102c8:	f1078693          	addi	a3,a5,-240 # 11f10 <result>
    102cc:	fdc42603          	lw	a2,-36(s0)
    102d0:	fe442703          	lw	a4,-28(s0)
    102d4:	00070793          	mv	a5,a4
@@ -214,7 +214,7 @@ int main(){
    10350:	00f687bb          	addw	a5,a3,a5
    10354:	0007869b          	sext.w	a3,a5
    10358:	000127b7          	lui	a5,0x12
-   1035c:	f1078613          	addi	a2,a5,-240 # 11f10 <C>
+   1035c:	f1078613          	addi	a2,a5,-240 # 11f10 <result>
    10360:	fdc42583          	lw	a1,-36(s0)
    10364:	fe442703          	lw	a4,-28(s0)
    10368:	00070793          	mv	a5,a4

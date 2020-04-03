@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 int N, K, M;
-int A[3][3], B[3][3], C[3][3];
+int A[3][3], B[3][3], result[3][3];
 
 int main(){
 	N = 3;
@@ -15,7 +15,7 @@ int main(){
 	for(int i = 0; i < N; i++)
         for(int k = 0; k < K; k++)
             for(int j = 0; j < M; j++)
-                C[i][j] += A[i][k] * B[k][j];
+                result[i][j] += A[i][k] * B[k][j];
 
 
     return 0;
