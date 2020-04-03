@@ -16,6 +16,8 @@ import (
 type Debugger struct {
 }
 
+
+
 func (d *Debugger) DisplayRegisters(r *register.Heap64) {
 	for i := uint8(0); i < register.RegNum; i++ {
 		fmt.Printf(" %4s: 0x%016x", register.NamefromIndex(i), r.Load(uint8(i)))
@@ -31,6 +33,15 @@ func (d *Debugger) DisplaySymbolAddr(sim *simulator.Simulator, name string) {
 	} else {
 		fmt.Printf("Couldn't find symbol \"%s\"\n", name)
 	}
+}
+
+func (d *Debugger) DisplayPCInstruction(sim *simulator.Simulator){
+	fmt.Printf("PC(0x%016x) -> ", sim.PC)
+	defer func() {
+		str := recover()
+		if str!=nil{fmt.Println(str)}
+	}()
+	d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
 }
 
 func (d *Debugger) DisplayAllSymbolAddr(sim *simulator.Simulator) {
@@ -128,12 +139,10 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 	lineReader := bufio.NewReader(os.Stdin)
 	fmt.Println("Start running...")
 	for true {
-		if !sim.HasFinished() {
-			fmt.Print("PC -> ")
-			d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
-		}else{
+		if sim.HasFinished() {
 			fmt.Println("The program has ended.")
 		}
+		d.DisplayPCInstruction(sim)
 		fmt.Print("(Debug) ")
 		line, _ := lineReader.ReadString('\n')
 		line = strings.Trim(line, "\n")
@@ -149,7 +158,7 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 		case commands[0] == "c":
 			var err error = nil
 			for !sim.HasFinished() && err == nil {
-				d.ParseMemoryCommand(sim, []string{"x/1i", strconv.FormatUint(sim.PC, 10)})
+				d.DisplayPCInstruction(sim)
 				_, err = sim.SingleStep()
 			}
 		case commands[0] == "si":
