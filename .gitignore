@@ -1,3 +1,5 @@
 # IDE config
 .vscode/
 .idea/
+
+bin/
