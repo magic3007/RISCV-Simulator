@@ -19,7 +19,7 @@ func (d *PipeDebugger) Usage() {
 	fmt.Println(strings.Join([]string{
 		"Usage:",
 		"   help                          : Display this message",
-		"   exit                          : Exit the debug prompt",
+		"   exit                          : Exit the debug prompt, and display the statistic",
 		"   c                             : Continue running until the program comes to the end",
 		"   si                            : Run a single pipeline stage",
 		"   reg                           : Display register information",

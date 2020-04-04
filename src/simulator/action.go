@@ -445,7 +445,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(int64(int32(m.LoadU32(t1 + bit_utils.UnSignExtU64(imm))))); r.Store(rd, v)
+					t1:=r.Load(rs1); v:= uint64(m.LoadU32(t1 + bit_utils.UnSignExtU64(imm))); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1093,7 +1093,7 @@ var ActionSet = []Action{{
 				if t, ok := inst.(isa.UInstruction); ok{
 					rd, imm := t.Rd, t.Imm
 					_, _ = rd, imm
-					r.Store(rd, *pc + (bit_utils.SignExtU64(imm)))
+					r.Store(rd, *pc + bit_utils.SignExtU64(imm))
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -1197,7 +1197,7 @@ var ActionSet = []Action{{
 				return
 				},
 		},{
-			Name: "dviu",
+			Name: "divu",
 			Pred: func (inst uint32) bool {
 				return isa.IsMatchRFormat(0b0110011,0b100,0b0000001, inst)
 			},
@@ -1205,7 +1205,7 @@ var ActionSet = []Action{{
 				return isa.NewRInstruction(inst)
 			},
 			ToString: func (inst isa.Instruction) string {
-				return "dviu " + isa.ToDSSFormat(inst)
+				return "divu " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
 				m, r, pc := &sim.M, &sim.R, &sim.PC
