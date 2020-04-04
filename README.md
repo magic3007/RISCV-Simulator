@@ -1,4 +1,4 @@
-# sRISCV-Simulator
+# RISCV-Simulator
 
 A Simple RISC-V ISA Simulator that supports *RV64I* Base Instruction Set and *RV64M* Standard Extension, and can run in both <u>single-instruction mode</u> and <u>pipeline mode</u>. ✨
 
@@ -42,7 +42,7 @@ the GNU General Public License version 3 or (at your option) any later version.
 This program has absolutely no warranty.
 ```
 
-A [makefile](./testcases/makefile) script has be provided under directory [testcases/](./testcases). Switch to this directory and type `make` , Any file with extension `*.c` under this directory will be compiled the RISC-V executable file as well as disassembled to corresponding assembly language file.
+A [makefile](./testcases/makefile) script has be provided under directory [testcases/](./testcases). Switch to this directory and type `make` , then any file with extension `*.c` under this directory will be compiled the RISC-V executable file as well as disassembled to corresponding assembly language file.
 
 ```bash
 $ cd testcases
@@ -57,7 +57,7 @@ Note that several compiling flags are necessary
 - `-static`: statically linking
 - `-Wl,--no-relax`: To start running from `main`, we have to forbid the compiler to leverage the global pointer to optimize
 
-*<mark>Node</mark>: This simulator currently only support 32-bit instruction. However, some linked library functions in prebuilt toolchain use 16-bit compressed Instructions, therefore this simulator currently starts running from `main` and does not support system calls.*🤯🤯
+*<mark>Note</mark>: This simulator currently only support 32-bit instruction. However, some linked library functions in prebuilt toolchain use 16-bit compressed Instructions, therefore this simulator currently starts running from `main` and does not support system calls.* 🤯🤯
 
 See more info in [makefile](./testcases/makefile).
 
@@ -74,7 +74,7 @@ go build -o bin/sim src/main.go
 
 One sparkle point of this simulator is that it leverages <u>the design idea of data-driving</u>. In other words, by editing the table [src/action_table.csv](./src/action_table.csv) with portability, you could add, delete and modify the behavior or even the delay in each pipeline stage of any instruction, So you could design your customized instruction!😜
 
-With little effort, the scope of supported instructions could be expanded with ease. To see how currently supported instruction functions, please refer to [src/action_table.csv](./src/action_table.csv).
+With little effort, the scope of supported instructions could be expanded with ease. To see how currently supported instructions function, please refer to [src/action_table.csv](./src/action_table.csv).
 
 After you have configured your customized instruction, you have to generate code as following, and then recompile your code as illustrated in [this previous section](#compilation).
 
@@ -83,4 +83,78 @@ export GOPATH=$(pwd)
 go run src/action_parser.go -f src/action_table.csv -t src/action.tmpl
 go run src/microaction_parser.go -f src/action_table.csv -t src/microaction.tmpl
 ```
+
+## Usage
+
+This simulator support two modes: single-instruction mode and pipeline mode.
+
+```bash
+$ ./bin/sim --help
+Usage of ./bin/sim:
+  -f string
+        Filepath of the ELF file
+  -m string
+        Simulation mode. Valid modes are: debug, pipeline (default "debug")
+  -v    Display verbose info of ELF file. To disable displaying these info, type "-v=0" (de
+fault true)
+```
+
+### Single-Instruction Mode
+
+"Single-Instruction” means running only one single instruction each time you type `si`, the same as that in `gdb`. 
+
+```bash
+$ ./bin/sim -f testcases/add.out -m=debug -v=0
+Start running...
+PC(0x0000000000010188) -> 0x0000000000010188:           addi sp, sp, -32
+(Debug) help
+Usage:
+   help                          : Display this message
+   exit                          : Exit the debug prompt
+   c                             : Continue running until the program comes to the end
+   si                            : Run a single machine instruction
+   reg                           : Display register information
+   info [symbol name]            : Display the address of this symbol defined in ELF file. if "symbol name" is not specified, display all the symbols.
+   x/<length><format> [address]  : Display the memory contents at a given address using the specified format. The address is PC by default
+                                                                        Valid format specifiers are:
+                                                                                        i - instruction
+                                                                                        b - byte
+                                                                                        h - half word(16-bit value)
+                                                                                        w - word(32-bit value)
+                                                                                        g - giant word (64-bit value)
+```
+
+Here is an example in single-instruction mode:
+
+![single-inst-demo](./README.assets/single-inst-demo.gif)
+
+### Pipeline Mode
+
+Suppose you have a primitive understanding of pipeline in the field of computer architecture. In pipeline mode, each time you type `si`, the simulator only run one pipeline step. Therefore, the modification on registers and memory could not make a in-time impact. 	When you type `status`, the simulator will display the status of the whole pipeline, which is convenient to understand what are happening when the pipeline functions! 🎃
+
+```bash
+$ ./bin/sim -f testcases/add.out -m=pipeline -v=0
+Start running...
+PC(0x0000000000010188) -> 0x0000000000010188:           addi sp, sp, -32
+(PipeDebug) help
+Usage:
+   help                          : Display this message
+   exit                          : Exit the debug prompt, and display the statistic
+   c                             : Continue running until the program comes to the end
+   si                            : Run a single pipeline stage
+   reg                           : Display register information
+   status                        : Display the status of each pipeline register
+   info [symbol name]            : Display the address of this symbol defined in ELF file. if "symbol name" is not specified, display all the symbols.
+   x/<length><format> [address]  : Display the memory contents at a given address using the specified format. The address is PC by default
+                                                                        Valid format specifiers are:
+                                                                                        i - instruction
+                                                                                        b - byte
+                                                                                        h - half word(16-bit value)
+                                                                                        w - word(32-bit value)
+                                                                                        g - giant word (64-bit value)
+```
+
+Here is an example in pipeline mode:
+
+<img src="./README.assets/pipeline-demo.gif" alt="pipeline-demo" style="zoom: 200%;" />
 

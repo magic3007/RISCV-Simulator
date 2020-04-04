@@ -62,7 +62,7 @@ func (r *WriteBackReg) ToString() string {
 			"DstE: " + register.NamefromIndex(r.DstE),
 			"DstM: " + register.NamefromIndex(r.DstM),
 		}, func(it string) string { return fmt.Sprintf("%-20s", it) }),
-		"	")
+		" ")
 	return rv
 }
 
@@ -91,10 +91,7 @@ func (r *AccessMemoryReg) ToString() string {
 			"DstM: " + register.NamefromIndex(r.DstM),
 			"UnselectedPC: " + "0x" + strconv.FormatUint(r.UnselectedPC, 16),
 		}, func(it string) string { return fmt.Sprintf("%-20s", it) }),
-		"	")
-	rv += strings.Join([]string{
-
-	}, "		")
+		" ")
 	return rv
 }
 
@@ -126,7 +123,7 @@ func (r *ExecuteReg) ToString() string {
 			"DstM: " + register.NamefromIndex(r.DstM),
 			"UnselectedPC: " + "0x" + strconv.FormatUint(r.UnselectedPC, 16),
 		}, func(it string) string { return fmt.Sprintf("%-20s", it) }),
-		"	")
+		" ")
 	return rv
 }
 
@@ -157,6 +154,6 @@ func (r *DecodeReg) ToString() string {
 			"ValM: " + register.NamefromIndex(r.DstM),
 			"UnselectedPC: " + "0x" + strconv.FormatUint(r.UnselectedPC, 16),
 		}, func(it string) string { return fmt.Sprintf("%-20s", it) }),
-		"	")
+		" ")
 	return rv
 }
