@@ -28,7 +28,7 @@ func (ms memSegment64) slice(addr uint64) []byte{
 }
 
 type Memory64 struct {
-	segs []memSegment64;
+	segs []memSegment64
 }
 
 func (m *Memory64) findSegment(addr uint64) (*memSegment64, bool) {

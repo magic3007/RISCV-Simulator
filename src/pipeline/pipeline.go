@@ -36,6 +36,7 @@ type Pipe struct {
 	ValidInstCountCounter statistic.Counter
 	JumpPredictionCounter statistic.RatioCounter
 	IndirectJumpCounter   statistic.Counter
+	StallForDataHazardCounter statistic.Counter
 }
 
 func (p *Pipe) WriteBack() {
@@ -141,6 +142,7 @@ func (p *Pipe) Decode() {
 	if (p.E_dstM != 0) && (rs1 == p.E_dstM || rs2 == p.E_dstM) {
 		p.EReg.IsBubble = true
 		p.DReg.Status = &StallStatus{}
+		p.StallForDataHazardCounter.Tick()
 		return
 	}
 	SelectRegVal := func(index uint8) uint64 {
