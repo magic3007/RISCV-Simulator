@@ -51,7 +51,7 @@ func (sim *Simulator) LoadMemory() {
 		}
 	}
 
-	// Allocate stack memory and set stack pointer
+	// Insert stack memory and set stack pointer
 	sim.M.Alloc(STACK_TOP - STACK_SIZE, STACK_SIZE)
 	sim.R.StoreByName("sp", STACK_TOP)
 

@@ -73,7 +73,7 @@ func (d *PipeDebugger) RunPrompt(p *pipeline.Pipe) {
 			fmt.Printf("%-40s: %.5f\n", "CPI",
 				float32(p.CycleCounter.Count * pipeline.Pipeline_step_period)/float32(p.ValidInstCountCounter.Count))
 			fmt.Printf("%-40s: %.5f\n", "SPI",
-				float32(float32(p.CycleCounter.Count) / float32(p.ValidInstCountCounter.Count)))
+				float32(p.CycleCounter.Count) / float32(p.ValidInstCountCounter.Count))
 			fmt.Printf("%-40s: %d\n", "# of Indirect Jump", p.IndirectJumpCounter.Count)
 			fmt.Printf("%-40s: %.5f%%\n", "Jump Prediction Success Rate",
 				 100.0 * (1- float32(p.JumpPredictionCounter.Numerator.Count) /
