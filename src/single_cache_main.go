@@ -91,19 +91,23 @@ func main(){
 	defer outfile.Close()
 
 	fmt.Fprint(outfile, "LineSize,Associativity,CacheSize,WriteUpPolicy,WriteBackPolicy,Miss Rate,AMAT\n")
-	LineSizes := []uint{32, 64, 128, 256,512,1024,2048,4096}
-	//LineSizes := []uint{64}
-	//Associativities := []uint{1,2,4,8,16}
+	//LineSizes := []uint{32, 64, 128, 256,512,1024,2048,4096}
+	LineSizes := []uint{256}
+	//Associativities := []uint{1,2,4,8,16,32}
 	Associativities := []uint{8}
 	//Associativities := []uint{16}
-	CacheSizes := []uint{32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024,  1024 * 1024,
-		2 * 1024 * 1024, 4 * 1024 * 1024, 8 * 1024 * 1024, 16 * 1024 * 1024, 32 * 1024 * 1024,
-		}
-	//CacheSizes := []uint{64 * 1024}
-	WriteUpPolicies := []cache.WriteUpPolicyType{cache.WriteBack}
-	WriteBackPolicies := []cache.WriteBackPolicyType{cache.WriteAllocate}
-	//WriteUpPolicies := []cache.WriteUpPolicyType{cache.WriteBack, cache.WriteThrough}
-	//WriteBackPolicies := []cache.WriteBackPolicyType{cache.WriteAllocate, cache.NoWriteAllocate}
+	//CacheSizes := []uint{32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024,  1024 * 1024,
+	//	2 * 1024 * 1024, 4 * 1024 * 1024, 8 * 1024 * 1024, 16 * 1024 * 1024, 32 * 1024 * 1024,
+	//	}
+	//CacheSizes := []uint{32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 384 * 1024, 512 * 1024,  640 * 1024, 768 * 1024,
+	//	896 * 1024, 1024 * 1024,
+	//	2 * 1024 * 1024, 4 * 1024 * 1024, 8 * 1024 * 1024, 16 * 1024 * 1024, 32 * 1024 * 1024,
+	//	}
+	CacheSizes := []uint{512 * 1024}
+	//WriteUpPolicies := []cache.WriteUpPolicyType{cache.WriteBack}
+	//WriteBackPolicies := []cache.WriteBackPolicyType{cache.WriteAllocate}
+	WriteUpPolicies := []cache.WriteUpPolicyType{cache.WriteBack, cache.WriteThrough}
+	WriteBackPolicies := []cache.WriteBackPolicyType{cache.WriteAllocate, cache.NoWriteAllocate}
 
 	for _, LineSize := range LineSizes{
 		for _, Associativity := range Associativities{
