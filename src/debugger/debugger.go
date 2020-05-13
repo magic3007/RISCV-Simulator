@@ -145,6 +145,7 @@ func (d *Debugger) RunPrompt(sim *simulator.Simulator) {
 		d.DisplayPCInstruction(sim)
 		fmt.Print("(Debug) ")
 		line, _ := lineReader.ReadString('\n')
+		line = strings.Trim(line, "\r\n")
 		line = strings.Trim(line, "\n")
 		commands := strings.Split(line, " ")
 		commands = utils.Filter(commands, func(str interface{}) bool { return str != "" }).([]string)

@@ -56,6 +56,7 @@ func (d *PipeDebugger) RunPrompt(p *pipeline.Pipe) {
 		d.DisplayPCInstruction(sim)
 		fmt.Print("(PipeDebug) ")
 		line, _ := lineReader.ReadString('\n')
+		line = strings.Trim(line, "\r\n")
 		line = strings.Trim(line, "\n")
 		commands := strings.Split(line, " ")
 		commands = utils.Filter(commands, func(str interface{}) bool { return str != "" }).([]string)
