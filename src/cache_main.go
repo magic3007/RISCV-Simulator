@@ -36,6 +36,7 @@ func main(){
 		CacheSize:       8 * 1024 * 1024,
 		WriteUpPolicy:   cache.WriteBack,
 		WriteBackPolicy: cache.WriteAllocate,
+		EvictPolicy: 	 cache.LFU,
 	}
 	L3Cache := cache.NewCache(latency, config, mainMemory)
 
@@ -48,6 +49,7 @@ func main(){
 		CacheSize:       256 * 1024,
 		WriteUpPolicy:   cache.WriteBack,
 		WriteBackPolicy: cache.WriteAllocate,
+		EvictPolicy: 	 cache.LFU,
 	}
 	L2Cache := cache.NewCache(latency, config, L3Cache)
 
@@ -60,6 +62,7 @@ func main(){
 		CacheSize:       32 * 1024,
 		WriteUpPolicy:   cache.WriteBack,
 		WriteBackPolicy: cache.WriteAllocate,
+		EvictPolicy: 	 cache.LFU,
 	}
 	L1Cache := cache.NewCache(latency, config, L2Cache)
 

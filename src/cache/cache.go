@@ -6,6 +6,7 @@ import (
 
 type WriteUpPolicyType uint
 type WriteBackPolicyType uint
+type EvictPolicyType uint
 
 const (
 	WriteThrough WriteUpPolicyType = iota
@@ -17,12 +18,18 @@ const (
 	NoWriteAllocate
 )
 
+const (
+	LRU 	EvictPolicyType = iota
+	LFU
+)
+
 type CacheConfig struct {
 	LineSize		uint
 	Associativity	uint
 	CacheSize		uint
 	WriteUpPolicy	WriteUpPolicyType
 	WriteBackPolicy WriteBackPolicyType
+	EvictPolicy		EvictPolicyType
 }
 
 func (c *CacheConfig) SetNum() uint{
@@ -51,6 +58,7 @@ type CacheLine struct{
 	IsDirty 		bool
 	IsValid 		bool
 	TimeStamp		uint
+	Counter			uint
 }
 
 func (c *CacheLine) Update(addr uint64, ExtractTagFunc func(uint64)uint64){
@@ -58,6 +66,7 @@ func (c *CacheLine) Update(addr uint64, ExtractTagFunc func(uint64)uint64){
 	c.Tag = ExtractTagFunc(addr)
 	c.IsDirty = false
 	c.IsValid = true
+	c.Counter = 0
 }
 
 type Cache struct{
@@ -96,10 +105,20 @@ func (c *Cache) FindCacheLine(addr uint64) (*CacheLine, bool) {
 func (c *Cache) Insert(addr uint64) (evicteeAddr uint64, IsRequirePushDown bool) {
 	index := c.config_.Index(addr)
 	evictee := &c.lines_[index][0]
-	for i := range c.lines_[index] {
-		if c.lines_[index][i].TimeStamp < evictee.TimeStamp {
-			evictee = &c.lines_[index][i]
+	if c.config_.EvictPolicy == LRU {
+		for i := range c.lines_[index] {
+			if c.lines_[index][i].TimeStamp < evictee.TimeStamp {
+				evictee = &c.lines_[index][i]
+			}
 		}
+	}else if c.config_.EvictPolicy == LFU {
+		for i := range c.lines_[index] {
+			if c.lines_[index][i].Counter < evictee.Counter {
+				evictee = &c.lines_[index][i]
+			}
+		}
+	}else{
+		panic("unknown eviction policy")
 	}
 	evicteeAddr = evictee.Addr
 	IsRequirePushDown = evictee.IsValid && evictee.IsDirty
@@ -119,6 +138,7 @@ func (c *Cache) Read(addr uint64) uint{
 		time += c.lower_.HandleRequest(addr, uint(1), Read)
 		line, isFound = c.FindCacheLine(addr)
 	}
+	line.Counter += 1
 	line.TimeStamp = c.TimeStamp
 	return time
 }
@@ -152,6 +172,7 @@ func (c *Cache) Write(addr uint64) uint{
 			return time
 		}
 	}
+	line.Counter += 1
 	line.TimeStamp = c.TimeStamp
 	return time
 }
