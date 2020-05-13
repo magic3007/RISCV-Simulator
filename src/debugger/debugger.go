@@ -76,28 +76,28 @@ func (d *Debugger) ParseMemoryCommand(sim *simulator.Simulator, commands []strin
 	for i := uint64(0); i < counter; i++ {
 		switch submatches[2] {
 		case "b":
-			d.displayMemory(&sim.M, addr, func(m *memory.Memory64, addr uint64) string {
-				return fmt.Sprintf("0x%02x", m.LoadU8(addr))
+			d.displayMemory(sim.M, addr, func(m *memory.Memory64, addr uint64) string {
+				return fmt.Sprintf("0x%02x", m.DebugLoadU8(addr))
 			})
 			addr += 1
 		case "h":
-			d.displayMemory(&sim.M, addr, func(m *memory.Memory64, addr uint64) string {
-				return fmt.Sprintf("0x%04x", m.LoadU16(addr))
+			d.displayMemory(sim.M, addr, func(m *memory.Memory64, addr uint64) string {
+				return fmt.Sprintf("0x%04x", m.DebugLoadU16(addr))
 			})
 			addr += 2
 		case "w":
-			d.displayMemory(&sim.M, addr, func(m *memory.Memory64, addr uint64) string {
-				return fmt.Sprintf("0x%08x", m.LoadU32(addr))
+			d.displayMemory(sim.M, addr, func(m *memory.Memory64, addr uint64) string {
+				return fmt.Sprintf("0x%08x", m.DebugLoadU32(addr))
 			})
 			addr += 4
 		case "g":
-			d.displayMemory(&sim.M, addr, func(m *memory.Memory64, addr uint64) string {
-				return fmt.Sprintf("0x%016x", m.LoadU64(addr))
+			d.displayMemory(sim.M, addr, func(m *memory.Memory64, addr uint64) string {
+				return fmt.Sprintf("0x%016x", m.DebugLoadU64(addr))
 			})
 			addr += 8
 		case "i":
-			d.displayMemory(&sim.M, addr, func(m *memory.Memory64, addr uint64) string {
-				code := m.LoadU32(addr)
+			d.displayMemory(sim.M, addr, func(m *memory.Memory64, addr uint64) string {
+				code := m.DebugLoadU32(addr)
 				item, err := simulator.Match(code)
 				if err != nil {
 					return "<unknown instruction>"

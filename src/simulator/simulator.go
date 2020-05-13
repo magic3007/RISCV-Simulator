@@ -16,16 +16,16 @@ var (
 )
 
 type Simulator struct {
-	M       memory.Memory64
+	M       *memory.Memory64
 	R       register.Heap64
 	PC      uint64
 	ElfFile *elf.File
 }
 
-func NewSimulator(elfFilePath string) *Simulator {
+func NewSimulator(elfFilePath string, memory *memory.Memory64) *Simulator {
 	file, err := elf.Open(elfFilePath)
 	utils.PANIC_CHECK(err)
-	return &Simulator{ElfFile: file}
+	return &Simulator{ElfFile: file, M: memory}
 }
 
 func (sim *Simulator) FindSymbolFromName(name string) (*elf.Symbol, bool) {
@@ -82,7 +82,7 @@ func (sim *Simulator) SingleStep() (*Action, error) {
 		return nil, errors.New("the program has finished")
 	}
 	m := sim.M
-	code := m.LoadU32(sim.PC)
+	code, _ := m.LoadU32(sim.PC)
 	if isa.InstructionLength(code) != 32{
 		log.Panicln("Only support 32-bit instruction")
 	}

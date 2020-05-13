@@ -75,14 +75,16 @@ func (p *Pipe) AccessMemory() {
 		p.MReg.Status = &NormalStatus{}
 		return
 	}
+	if p.MReg.AccumulatedPeriod == 0{
+		p.MReg.valM, p.MReg.AccessTime = p.MReg.MicroInst.MemoryAccessFunction(p.M, p.MReg.ValE, p.MReg.ValRs2)
+	}
 	p.MReg.AccumulatedPeriod += Pipeline_step_period
-	if p.MReg.AccumulatedPeriod < p.MReg.MicroInst.MStagePeriod {
+	if p.MReg.AccumulatedPeriod < p.MReg.AccessTime {
 		p.WReg.IsBubble = true
 		p.MReg.Status = &StallStatus{}
 		return
 	}
-	memAccessFunc := p.MReg.MicroInst.MemoryAccessFunction
-	p.m_valM = memAccessFunc(&p.M, p.MReg.ValE, p.MReg.ValRs2)
+	p.m_valM = p.MReg.valM
 	p.WReg = WriteBackReg{
 		PipeReg{&NormalStatus{}, false, 0},
 		p.MReg.MicroInst,
@@ -123,6 +125,7 @@ func (p *Pipe) Execute() {
 		PipeReg{&NormalStatus{}, false, 0},
 		p.EReg.MicroInst, isPredictError, p.EReg.MicroInst.SelectM_valE(ValE, ValC),
 		p.EReg.ValRs2, p.EReg.DstE, p.EReg.DstM, p.EReg.UnselectedPC,
+		0, 0,
 	}
 	p.e_valE = ValE
 	p.EReg.Status = &NormalStatus{}
@@ -219,7 +222,7 @@ func (p *Pipe) Fetch() (*MicroAction, error) {
 		return nil, nil
 	}
 	m := p.M
-	code := m.LoadU32(pc)
+	code, _ := m.LoadU32(pc)
 	if isa.InstructionLength(code) != 32 {
 		log.Panicln("Only support 32-bit instruction")
 	}

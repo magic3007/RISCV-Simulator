@@ -17,14 +17,13 @@ type MicroAction struct {
 	Inst isa.Instruction
 	IsBranch bool
 	IsIndirectJump bool
-	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64)
+	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint)
 	ALUFunction func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64)
 	SelectM_valE func(e_valE uint64, valC uint64) uint64
 	ValCFunction func(pc uint64, Imm int32) (valC uint64)
 	dstE, dstM uint8
 	PositiveOptionPC func(pc uint64, Imm int32) uint64
 	NegativeOptionPC func(pc uint64, Imm int32) uint64
-	MStagePeriod uint
 	EStagePeriod uint
 	InstToString func() string
 }
@@ -44,9 +43,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -75,7 +75,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -96,9 +95,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -127,7 +127,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -148,9 +147,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -179,7 +179,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -200,9 +199,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -231,7 +231,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -252,9 +251,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -283,7 +283,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -304,9 +303,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -335,7 +335,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -356,9 +355,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -387,7 +387,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -408,9 +407,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -439,8 +439,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 15,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -460,9 +459,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -491,7 +491,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -512,9 +511,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -543,7 +543,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -564,9 +563,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -595,7 +595,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -616,9 +615,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -647,8 +647,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 15,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -668,9 +667,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -699,7 +699,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -720,10 +719,11 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
-						output=uint64(int64(int8(m.LoadU8(addr))))
+						time = 1
+						temp, time := m.LoadU8(addr); output=uint64(int64(int8(temp)))
 						return
 					},
 					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
@@ -751,7 +751,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
@@ -772,10 +771,11 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
-						output=uint64(int64(int16(m.LoadU16(addr))))
+						time = 1
+						temp, time := m.LoadU16(addr); output=uint64(int64(int16(temp)))
 						return
 					},
 					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
@@ -803,7 +803,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
@@ -824,10 +823,11 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
-						output=uint64(int64(int32(m.LoadU32(addr))))
+						time = 1
+						temp, time := m.LoadU32(addr); output=uint64(int64(int32(temp)))
 						return
 					},
 					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
@@ -855,7 +855,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
@@ -876,10 +875,11 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
-						output=uint64(int64(m.LoadU64(addr)))
+						time = 1
+						temp, time := m.LoadU64(addr); output=uint64(int64(temp))
 						return
 					},
 					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
@@ -907,7 +907,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
@@ -928,10 +927,11 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
-						output=uint64(m.LoadU32(addr))
+						time = 1
+						temp, time := m.LoadU32(addr); output=uint64(temp)
 						return
 					},
 					ALUFunction: func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64){
@@ -959,7 +959,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Read_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: isa.NewIInstruction(code).Rd,
@@ -980,9 +979,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1011,7 +1011,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1032,9 +1031,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1063,7 +1063,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1084,9 +1083,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1115,7 +1115,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1136,9 +1135,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1167,7 +1167,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1188,9 +1187,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1219,7 +1219,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1240,9 +1239,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1271,7 +1271,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1292,9 +1291,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1323,7 +1323,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1344,9 +1343,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1375,7 +1375,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1396,9 +1395,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1427,7 +1427,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1448,9 +1447,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1479,7 +1479,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1500,9 +1499,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1531,7 +1531,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1552,9 +1551,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1583,7 +1583,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1604,9 +1603,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1635,7 +1635,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -1656,9 +1655,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1687,7 +1687,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -1708,9 +1707,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1739,7 +1739,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -1760,9 +1759,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1791,7 +1791,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -1812,9 +1811,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1843,7 +1843,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -1864,9 +1863,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewIInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: true,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -1895,7 +1895,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewIInstruction(code).Rd,
 					dstM: 0,
@@ -1916,9 +1915,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewSInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						m.StoreU8(addr, uint8(input))
 						return
 					},
@@ -1947,7 +1947,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Store_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -1968,9 +1967,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewSInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						m.StoreU16(addr, uint16(input))
 						return
 					},
@@ -1999,7 +1999,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Store_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2020,9 +2019,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewSInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						m.StoreU32(addr, uint32(input))
 						return
 					},
@@ -2051,7 +2051,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Store_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2072,9 +2071,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewSInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						m.StoreU64(addr, input)
 						return
 					},
@@ -2103,7 +2103,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Store_data_memory_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2124,9 +2123,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewBInstruction(code),
 					IsBranch: true,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2155,7 +2155,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return pc+4
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2176,9 +2175,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewBInstruction(code),
 					IsBranch: true,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2207,7 +2207,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return pc+4
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2228,9 +2227,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewBInstruction(code),
 					IsBranch: true,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2259,7 +2259,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return pc+4
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2280,9 +2279,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewBInstruction(code),
 					IsBranch: true,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2311,7 +2311,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return pc+4
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: 0,
 					dstM: 0,
@@ -2332,9 +2331,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewUInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2363,7 +2363,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewUInstruction(code).Rd,
 					dstM: 0,
@@ -2384,9 +2383,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewUInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2415,7 +2415,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewUInstruction(code).Rd,
 					dstM: 0,
@@ -2436,9 +2435,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewJInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2467,7 +2467,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewJInstruction(code).Rd,
 					dstM: 0,
@@ -2488,9 +2487,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2519,7 +2519,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -2540,9 +2539,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2571,7 +2571,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -2592,9 +2591,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2623,8 +2623,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 15,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -2644,9 +2643,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2675,8 +2675,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 15,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -2696,9 +2695,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2727,7 +2727,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
 					EStagePeriod: Pipeline_step_period,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
@@ -2748,9 +2747,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2779,8 +2779,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 10,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -2800,9 +2799,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2831,8 +2831,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 10,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -2852,9 +2851,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2883,8 +2883,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 10,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{
@@ -2904,9 +2903,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.NewRInstruction(code),
 					IsBranch: false,
 					IsIndirectJump: false,
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						
 						return
 					},
@@ -2935,8 +2935,7 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						return 0
 					},
-					MStagePeriod: Pipeline_step_period,
-					EStagePeriod: 10,
+					EStagePeriod: 1,
 					dstE: isa.NewRInstruction(code).Rd,
 					dstM: 0,
 					InstToString:  func() string{

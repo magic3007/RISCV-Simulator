@@ -51,7 +51,6 @@ type MicroAction struct {
 	ValCFunction         string
 	PositiveOptionPC     string
 	NegativeOptionPC     string
-	MStagePeriod         string
 	EStagePeriod         string
 	DstE                 string
 	DstM                 string
@@ -90,11 +89,10 @@ func main() {
 			ValCFunction:         line[13],
 			PositiveOptionPC:     line[14],
 			NegativeOptionPC:     line[15],
-			MStagePeriod:         line[16],
-			EStagePeriod:         line[17],
-			DstE:                 line[18],
-			DstM:                 line[19],
-			M_velE_Source:        line[20],
+			EStagePeriod:         line[16],
+			DstE:                 line[17],
+			DstM:                 line[18],
+			M_velE_Source:        line[19],
 		}
 		actionSet = append(actionSet, data)
 	}

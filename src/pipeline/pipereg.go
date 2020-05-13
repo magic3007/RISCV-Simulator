@@ -68,11 +68,13 @@ func (r *WriteBackReg) ToString() string {
 
 type AccessMemoryReg struct {
 	PipeReg
-	MicroInst      MicroAction
-	IsPredictError bool
-	ValE, ValRs2   uint64
-	DstE, DstM     uint8
-	UnselectedPC   uint64
+	MicroInst      	MicroAction
+	IsPredictError 	bool
+	ValE, ValRs2   	uint64
+	DstE, DstM     	uint8
+	UnselectedPC   	uint64
+	AccessTime		uint
+	valM			uint64
 }
 
 func (r *AccessMemoryReg) ToString() string {
@@ -84,12 +86,13 @@ func (r *AccessMemoryReg) ToString() string {
 		[]string{
 			"Inst: " + r.MicroInst.InstToString(),
 			"STATUS: " + r.Status.ToString() + "(" + strconv.Itoa(int(r.AccumulatedPeriod)) + "/" +
-				strconv.Itoa(int(r.MicroInst.MStagePeriod)) + ")",
+				strconv.Itoa(int(r.AccessTime)) + ")",
 			"ValE: " + "0x" + strconv.FormatUint(r.ValE, 16),
 			"ValRs2: " + "0x" + strconv.FormatUint(r.ValRs2, 16),
 			"DstE: " + register.NamefromIndex(r.DstE),
 			"DstM: " + register.NamefromIndex(r.DstM),
 			"UnselectedPC: " + "0x" + strconv.FormatUint(r.UnselectedPC, 16),
+			"AccessTime:	" + strconv.FormatUint(uint64(r.AccessTime), 10),
 		}, func(it string) string { return fmt.Sprintf("%-20s", it) }),
 		" ")
 	return rv

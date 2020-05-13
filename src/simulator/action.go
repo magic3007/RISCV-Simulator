@@ -32,7 +32,7 @@ var ActionSet = []Action{{
 				return "add " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -56,7 +56,7 @@ var ActionSet = []Action{{
 				return "mul " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -80,7 +80,7 @@ var ActionSet = []Action{{
 				return "sub " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -104,7 +104,7 @@ var ActionSet = []Action{{
 				return "sll " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -128,7 +128,7 @@ var ActionSet = []Action{{
 				return "mulh " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -152,7 +152,7 @@ var ActionSet = []Action{{
 				return "slt " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -176,7 +176,7 @@ var ActionSet = []Action{{
 				return "xor " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -200,7 +200,7 @@ var ActionSet = []Action{{
 				return "div " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -224,7 +224,7 @@ var ActionSet = []Action{{
 				return "srl " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -248,7 +248,7 @@ var ActionSet = []Action{{
 				return "sra " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -272,7 +272,7 @@ var ActionSet = []Action{{
 				return "or " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -296,7 +296,7 @@ var ActionSet = []Action{{
 				return "rem " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -320,7 +320,7 @@ var ActionSet = []Action{{
 				return "and " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -344,12 +344,12 @@ var ActionSet = []Action{{
 				return "lb " + isa.ToDISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(int64(int8(m.LoadU8(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v)
+					t1:=r.Load(rs1); temp,_ :=m.LoadU8(t1 + bit_utils.SignExtU64(imm)); v:= uint64(int64(int8(temp))); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -368,12 +368,12 @@ var ActionSet = []Action{{
 				return "lh " + isa.ToDISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(int64(int16(m.LoadU16(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v)
+					t1:=r.Load(rs1); temp,_ :=m.LoadU16(t1 + bit_utils.SignExtU64(imm)); v:= uint64(int64(int16(temp))); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -392,12 +392,12 @@ var ActionSet = []Action{{
 				return "lw " + isa.ToDISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(int64(int32(m.LoadU32(t1 + bit_utils.SignExtU64(imm))))); r.Store(rd, v)
+					t1:=r.Load(rs1); temp,_ :=m.LoadU32(t1 + bit_utils.SignExtU64(imm)); v:= uint64(int64(int32(temp))); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -416,12 +416,12 @@ var ActionSet = []Action{{
 				return "ld " + isa.ToDISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(int64(m.LoadU64(t1 + bit_utils.SignExtU64(imm)))); r.Store(rd, v)
+					t1:=r.Load(rs1); temp,_ :=m.LoadU64(t1 + bit_utils.SignExtU64(imm)); v:= uint64(int64(temp)); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -440,12 +440,12 @@ var ActionSet = []Action{{
 				return "lwu " + isa.ToDISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
 					_, _, _ = rs1, rd, imm
-					t1:=r.Load(rs1); v:= uint64(m.LoadU32(t1 + bit_utils.UnSignExtU64(imm))); r.Store(rd, v)
+					t1:=r.Load(rs1); temp,_ :=m.LoadU32(t1 + bit_utils.UnSignExtU64(imm)); v:= uint64(temp); r.Store(rd, v)
 					*pc += 4
 				}else{
 					log.Panicln("Instruction Type mismatch!")
@@ -464,7 +464,7 @@ var ActionSet = []Action{{
 				return "addi " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -488,7 +488,7 @@ var ActionSet = []Action{{
 				return "slli " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -512,7 +512,7 @@ var ActionSet = []Action{{
 				return "slti " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -536,7 +536,7 @@ var ActionSet = []Action{{
 				return "xori " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -560,7 +560,7 @@ var ActionSet = []Action{{
 				return "srli " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -584,7 +584,7 @@ var ActionSet = []Action{{
 				return "srai " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -608,7 +608,7 @@ var ActionSet = []Action{{
 				return "ori " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -632,7 +632,7 @@ var ActionSet = []Action{{
 				return "andi " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -656,7 +656,7 @@ var ActionSet = []Action{{
 				return "addiw " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -680,7 +680,7 @@ var ActionSet = []Action{{
 				return "slliw " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -704,7 +704,7 @@ var ActionSet = []Action{{
 				return "srliw " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -728,7 +728,7 @@ var ActionSet = []Action{{
 				return "sraiw " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -752,7 +752,7 @@ var ActionSet = []Action{{
 				return "addw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -776,7 +776,7 @@ var ActionSet = []Action{{
 				return "subw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -800,7 +800,7 @@ var ActionSet = []Action{{
 				return "sllw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -824,7 +824,7 @@ var ActionSet = []Action{{
 				return "srlw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -848,7 +848,7 @@ var ActionSet = []Action{{
 				return "sraw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -872,7 +872,7 @@ var ActionSet = []Action{{
 				return "jalr " + isa.ToDSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.IInstruction); ok{
 					rs1, rd, imm := t.Rs1, t.Rd, t.Imm
@@ -896,7 +896,7 @@ var ActionSet = []Action{{
 				return "sb " + isa.ToSISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.SInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -920,7 +920,7 @@ var ActionSet = []Action{{
 				return "sh " + isa.ToSISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.SInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -944,7 +944,7 @@ var ActionSet = []Action{{
 				return "sw " + isa.ToSISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.SInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -968,7 +968,7 @@ var ActionSet = []Action{{
 				return "sd " + isa.ToSISFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.SInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -992,7 +992,7 @@ var ActionSet = []Action{{
 				return "beq " + isa.ToSSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.BInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -1016,7 +1016,7 @@ var ActionSet = []Action{{
 				return "bne " + isa.ToSSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.BInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -1040,7 +1040,7 @@ var ActionSet = []Action{{
 				return "blt " + isa.ToSSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.BInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -1064,7 +1064,7 @@ var ActionSet = []Action{{
 				return "bge " + isa.ToSSIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.BInstruction); ok{
 					rs1, rs2, imm := t.Rs1, t.Rs2, t.Imm
@@ -1088,7 +1088,7 @@ var ActionSet = []Action{{
 				return "auipc " + isa.ToDIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.UInstruction); ok{
 					rd, imm := t.Rd, t.Imm
@@ -1112,7 +1112,7 @@ var ActionSet = []Action{{
 				return "lui " + isa.ToDIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.UInstruction); ok{
 					rd, imm := t.Rd, t.Imm
@@ -1136,7 +1136,7 @@ var ActionSet = []Action{{
 				return "jal " + isa.ToDIFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.JInstruction); ok{
 					rd, imm := t.Rd, t.Imm
@@ -1160,7 +1160,7 @@ var ActionSet = []Action{{
 				return "mulhsu " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1184,7 +1184,7 @@ var ActionSet = []Action{{
 				return "mulhu " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1208,7 +1208,7 @@ var ActionSet = []Action{{
 				return "divu " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1232,7 +1232,7 @@ var ActionSet = []Action{{
 				return "remu " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1256,7 +1256,7 @@ var ActionSet = []Action{{
 				return "mulw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1280,7 +1280,7 @@ var ActionSet = []Action{{
 				return "divw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1304,7 +1304,7 @@ var ActionSet = []Action{{
 				return "divuw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1328,7 +1328,7 @@ var ActionSet = []Action{{
 				return "remw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd
@@ -1352,7 +1352,7 @@ var ActionSet = []Action{{
 				return "remuw " + isa.ToDSSFormat(inst)
 			},
 			Exec: func (sim *Simulator, inst isa.Instruction){
-				m, r, pc := &sim.M, &sim.R, &sim.PC
+				m, r, pc := sim.M, &sim.R, &sim.PC
 				_, _, _ = m, r, pc // Ensure any variable is used once
 				if t, ok := inst.(isa.RInstruction); ok{
 					rs1, rs2, rd := t.Rs1, t.Rs2, t.Rd

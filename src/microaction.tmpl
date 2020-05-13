@@ -18,14 +18,13 @@ type MicroAction struct {
 	Inst isa.Instruction
 	IsBranch bool
 	IsIndirectJump bool
-	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64)
+	MemoryAccessFunction func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint)
 	ALUFunction func(t1 uint64, t2 uint64, Imm int32, ValC uint64) (isPredictError bool,output uint64)
 	SelectM_valE func(e_valE uint64, valC uint64) uint64
 	ValCFunction func(pc uint64, Imm int32) (valC uint64)
 	dstE, dstM uint8
 	PositiveOptionPC func(pc uint64, Imm int32) uint64
 	NegativeOptionPC func(pc uint64, Imm int32) uint64
-	MStagePeriod uint
 	EStagePeriod uint
 	InstToString func() string
 }
@@ -47,9 +46,10 @@ var MicroActionConfigTable = []struct{
 					Inst: isa.New{{- .Type -}}Instruction(code),
 					IsBranch: {{.IsBranch}},
 					IsIndirectJump: {{.IsIndirectJump}},
-					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64){
+					MemoryAccessFunction: func(m *memory.Memory64,addr uint64, input uint64) (output uint64, time uint){
 						_, _, _ = m, addr, input // Ensure any variable is used once
 						output = 0
+						time = 1
 						{{.MemoryAccessFunction}}
 						return
 					},
@@ -78,7 +78,6 @@ var MicroActionConfigTable = []struct{
 						_, _ = pc, Imm // Ensure any variable is used once
 						{{.NegativeOptionPC}}
 					},
-					MStagePeriod: {{if ne .MStagePeriod ""}}{{.MStagePeriod}}{{else}}Pipeline_step_period{{end}},
 					EStagePeriod: {{if ne .EStagePeriod ""}}{{.EStagePeriod}}{{else}}Pipeline_step_period{{end}},
 					dstE: {{if ne .DstE ""}}isa.New{{- .Type -}}Instruction(code).{{.DstE}}{{else}}0{{end}},
 					dstM: {{if ne .DstM ""}}isa.New{{- .Type -}}Instruction(code).{{.DstM}}{{else}}0{{end}},
