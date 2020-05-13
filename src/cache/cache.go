@@ -149,6 +149,7 @@ func (c *Cache) Write(addr uint64) uint{
 			}
 		}else{
 			time += c.lower_.HandleRequest(addr, uint(1), Write)
+			return time
 		}
 	}
 	line.TimeStamp = c.TimeStamp
